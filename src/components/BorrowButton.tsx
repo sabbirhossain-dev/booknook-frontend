@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Loader2, CheckCircle2, User, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -13,12 +14,14 @@ import {
 
 import { authClient } from "@/lib/auth-client";
 import { IBook } from "../../types/books";
+import toast from "react-hot-toast";
 
 interface BorrowButtonProps {
   book: IBook;
 }
 
 const BorrowButton = ({ book }: BorrowButtonProps) => {
+  const router = useRouter();
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
@@ -37,28 +40,17 @@ const BorrowButton = ({ book }: BorrowButtonProps) => {
 
     try {
       const borrowData = {
-        // Book Information
         bookId: book._id,
-        title: book.title,
-        author: book.author,
-        category: book.category,
-        image: book.image,
-
-        // User Information
         userName: user.name,
-        userEmail: user.email,
+        userEmail: user.email.trim().toLowerCase(),
       };
 
-      const res = await fetch("http://localhost:5000/borrow", {
+      const res = await fetch("http://localhost:5000/borrows", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          bookId: book._id,
-          userName: session.user.name,
-          userEmail: session.user.email,
-        }),
+        body: JSON.stringify(borrowData),
       });
 
       const result = await res.json();
@@ -66,8 +58,14 @@ const BorrowButton = ({ book }: BorrowButtonProps) => {
       if (!res.ok) {
         throw new Error(result.message || "Borrow failed");
       }
+      if (res.ok) {
+        toast.success("Added Successfully!");
+      }
 
       setSuccess(true);
+
+      // Refresh book stock and other server component data.
+      router.refresh();
     } catch (error) {
       setError(
         error instanceof Error
@@ -101,7 +99,6 @@ const BorrowButton = ({ book }: BorrowButtonProps) => {
         </h3>
 
         <div className="space-y-3">
-          {/* User Name */}
           <div className="relative">
             <User
               size={17}
@@ -116,7 +113,6 @@ const BorrowButton = ({ book }: BorrowButtonProps) => {
             />
           </div>
 
-          {/* User Email */}
           <div className="relative">
             <Mail
               size={17}
@@ -132,14 +128,12 @@ const BorrowButton = ({ book }: BorrowButtonProps) => {
             />
           </div>
 
-          {/* Error */}
           {error && (
             <p className="rounded-lg bg-red-50 p-2 text-xs text-red-600">
               {error}
             </p>
           )}
 
-          {/* Borrow Button */}
           <Button
             onClick={handleBorrow}
             disabled={loading || success || !user}
@@ -149,6 +143,7 @@ const BorrowButton = ({ book }: BorrowButtonProps) => {
                 : "bg-blue-600 hover:bg-blue-700"
             }`}
           >
+            {success && toast.success("successfully added!")}
             {loading ? (
               <>
                 <Loader2 size={16} className="mr-2 animate-spin" />
