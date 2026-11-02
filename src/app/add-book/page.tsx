@@ -117,6 +117,7 @@ const AddBookPage = () => {
 
     const bookData = {
       ...formData,
+      totalCopies: Number(formData.totalCopies),
       image: imageUrl,
     };
 

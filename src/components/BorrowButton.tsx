@@ -54,7 +54,11 @@ const BorrowButton = ({ book }: BorrowButtonProps) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(borrowData),
+        body: JSON.stringify({
+          bookId: book._id,
+          userName: session.user.name,
+          userEmail: session.user.email,
+        }),
       });
 
       const result = await res.json();
