@@ -12,13 +12,24 @@ const BookCard = ({ book }: BookCardProps) => {
     <div className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-100/60">
       {/* Book Image */}
       <div className="relative h-64 overflow-hidden bg-slate-100">
-        <Image
-          src={book.image}
-          alt={book.title}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-        />
+        <div className="relative h-64 overflow-hidden bg-slate-100">
+          {book.image?.trim() ? (
+            <Image
+              src={book.image}
+              alt={book.title || "Book cover"}
+              fill
+              sizes="(max-width: 640px) 100vw, 25vw"
+              className="object-cover"
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center">
+              <div className="text-center text-gray-400">
+                <BookOpen size={40} className="mx-auto mb-2" />
+                <p className="text-sm">No Image Available</p>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Category Badge */}
         <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-blue-700 shadow-sm backdrop-blur">

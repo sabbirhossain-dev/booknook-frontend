@@ -132,9 +132,7 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
             <p className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-gray-500">
               <User size={16} className="shrink-0" />
               <span>Written by</span>
-              <span className="font-semibold text-gray-800">
-                {book.author}
-              </span>
+              <span className="font-semibold text-gray-800">{book.author}</span>
             </p>
 
             {/* Stats */}
@@ -196,7 +194,7 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
 
             {/* Actions */}
             <div className="mt-auto flex flex-col gap-3 border-t border-gray-100 pt-6 sm:flex-row sm:items-center sm:gap-4">
-              <BorrowButton bookId={book._id} />
+              <BorrowButton book={book} />
               <Link
                 href="/all-books"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-3.5 text-sm font-semibold text-gray-700 transition duration-200 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 sm:w-auto"
