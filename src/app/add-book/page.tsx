@@ -23,6 +23,7 @@ const categories = [
   "Science",
   "History",
   "Biography",
+  "kids",
   "Self Help",
   "Children",
   "Technology",
