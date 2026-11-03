@@ -40,6 +40,14 @@ const LogInPage = () => {
       toast.error("Something went wrong!");
     }
   };
+
+  const handleGoogleSignIn = async () => {
+    console.log("clicked");
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/",
+    });
+  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-12">
       <div className="w-full max-w-md">
@@ -148,7 +156,8 @@ const LogInPage = () => {
           {/* Google Login */}
           <button
             type="button"
-            className="w-full flex items-center justify-center gap-3 border border-gray-200 hover:bg-gray-50 py-3 rounded-xl font-semibold text-gray-700 transition"
+            onClick={handleGoogleSignIn}
+            className="w-full flex items-center justify-center gap-3 border border-gray-200 hover:bg-gray-100 cursor-pointer py-3 rounded-xl font-semibold text-gray-700 transition"
           >
             <svg width="21" height="21" viewBox="0 0 48 48">
               <path

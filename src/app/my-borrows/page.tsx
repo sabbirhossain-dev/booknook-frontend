@@ -131,9 +131,17 @@ const MyBorrowsPage = () => {
               <BorrowCard key={borrow._id} borrow={borrow} />
             ))
           ) : (
-            <p className="py-10 text-center text-gray-500">
-              You have no borrowed books!
-            </p>
+            <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-5 py-16 text-center">
+              <FaBookOpen className="mx-auto mb-4 text-4xl text-slate-300" />
+
+              <h2 className="text-xl font-bold text-slate-700">
+                No Books Found
+              </h2>
+
+              <p className="mt-2 text-sm text-slate-500">
+                You haven't borrowed any books yet.
+              </p>
+            </div>
           )}
         </div>
       </div>
