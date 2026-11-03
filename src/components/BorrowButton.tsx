@@ -58,20 +58,19 @@ const BorrowButton = ({ book }: BorrowButtonProps) => {
       if (!res.ok) {
         throw new Error(result.message || "Borrow failed");
       }
-      if (res.ok) {
-        toast.success("Added Successfully!");
-      }
 
       setSuccess(true);
+      toast.success("Book borrowed successfully!");
 
-      // Refresh book stock and other server component data.
       router.refresh();
     } catch (error) {
-      setError(
+      const message =
         error instanceof Error
           ? error.message
-          : "Unable to borrow this book. Try again.",
-      );
+          : "Unable to borrow this book. Try again.";
+
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -143,7 +142,6 @@ const BorrowButton = ({ book }: BorrowButtonProps) => {
                 : "bg-blue-600 hover:bg-blue-700"
             }`}
           >
-            {success && toast.success("successfully added!")}
             {loading ? (
               <>
                 <Loader2 size={16} className="mr-2 animate-spin" />

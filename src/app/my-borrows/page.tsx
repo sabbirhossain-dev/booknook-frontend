@@ -1,5 +1,10 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { FaBookOpen } from "react-icons/fa";
+
 import BorrowCard from "@/components/BorrowCard";
+import { authClient } from "@/lib/auth-client";
 
 interface IBorrow {
   _id: string;
@@ -15,29 +20,81 @@ interface IBorrow {
   returnedAt?: string;
 }
 
-const MyBorrowsPage = async () => {
-  let activeBorrows: IBorrow[] = [];
+const MyBorrowsPage = () => {
+  const { data: session, isPending } = authClient.useSession();
 
-  try {
-    const res = await fetch("http://localhost:5000/borrows", {
-      cache: "no-store",
-    });
+  const [activeBorrows, setActiveBorrows] = useState<IBorrow[]>([]);
+  const [loading, setLoading] = useState(true);
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch borrows");
-    }
+  const userEmail = session?.user?.email;
 
-    const borrows: IBorrow[] = await res.json();
+  useEffect(() => {
+    if (isPending || !userEmail) return;
 
-    // Only show currently borrowed books
-    activeBorrows = borrows.filter((borrow) => borrow.status === "borrowed");
-  } catch (error) {
-    console.error("My Borrows Error:", error);
+    let isMounted = true;
+
+    const fetchMyBorrows = async () => {
+      try {
+        setLoading(true);
+
+        const res = await fetch(
+          `http://localhost:5000/my-borrows?email=${encodeURIComponent(
+            userEmail,
+          )}`,
+          {
+            cache: "no-store",
+          },
+        );
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch borrows");
+        }
+
+        const data: IBorrow[] = await res.json();
+
+        if (isMounted) {
+          setActiveBorrows(data);
+        }
+      } catch (error) {
+        console.error("My Borrows Error:", error);
+
+        if (isMounted) {
+          setActiveBorrows([]);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchMyBorrows();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [userEmail, isPending]);
+
+  if (isPending || (userEmail && loading)) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#F8FAFC]">
+        <p className="text-gray-500">Loading your borrowed books...</p>
+      </div>
+    );
+  }
+
+  if (!userEmail) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#F8FAFC]">
+        <p className="text-gray-500">Please login first!</p>
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] px-4 py-10 md:px-8">
       <div className="mx-auto max-w-7xl">
+        {/* Header */}
         <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
             <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-indigo-600">
@@ -53,11 +110,13 @@ const MyBorrowsPage = async () => {
             </p>
           </div>
 
+          {/* Active Borrow Count */}
           <div className="flex items-center gap-3 rounded-xl border bg-white px-5 py-3 shadow-sm">
             <FaBookOpen className="text-2xl text-indigo-600" />
 
             <div>
               <p className="text-sm text-gray-500">Active Borrows</p>
+
               <p className="text-xl font-bold text-gray-800">
                 {activeBorrows.length}
               </p>
@@ -65,6 +124,7 @@ const MyBorrowsPage = async () => {
           </div>
         </div>
 
+        {/* Borrowed Books */}
         <div className="flex flex-col gap-5">
           {activeBorrows.length > 0 ? (
             activeBorrows.map((borrow) => (
