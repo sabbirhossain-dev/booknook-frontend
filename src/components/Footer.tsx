@@ -25,21 +25,21 @@ const Footer = () => {
                 alt="BookNest Logo"
                 width={45}
                 height={45}
-                className="h-11 w-11 object-contain"
+                className="h-10 md:h-11 w-10 md:w-11 object-contain"
               />
 
-              <span className="text-2xl font-extrabold tracking-tight">
+              <span className="text-xl md:text-2xl font-extrabold tracking-tight">
                 Book<span className="text-blue-600">Nook</span>
               </span>
             </Link>
 
-            <p className="mt-5 max-w-sm text-sm leading-7 text-slate-600">
+            <p className="mt-3 md:mt-5 max-w-sm text-sm leading-6 md:leading-7 text-slate-600">
               Your one-stop destination for discovering, borrowing, and enjoying
               books. Explore new stories and make reading a habit.
             </p>
 
             {/* Social Links */}
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-4 md:mt-6 flex flex-wrap gap-3">
               <a
                 href="#"
                 aria-label="Facebook"
@@ -68,9 +68,11 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="mb-5 text-base font-bold sm:text-lg">Quick Links</h3>
+            <h3 className="mb-3 md:mb-5 text-base font-bold sm:text-lg">
+              Quick Links
+            </h3>
 
-            <ul className="space-y-3 text-sm text-slate-600">
+            <ul className="space-y-2.5 text-sm text-slate-600">
               <li>
                 <Link href="/" className="transition hover:text-blue-600">
                   Home
@@ -108,9 +110,11 @@ const Footer = () => {
 
           {/* Categories */}
           <div>
-            <h3 className="mb-5 text-base font-bold sm:text-lg">Categories</h3>
+            <h3 className="mb-3 md:mb-5 text-base font-bold sm:text-lg">
+              Categories
+            </h3>
 
-            <ul className="space-y-3 text-sm text-slate-600">
+            <ul className="space-y-2.5 text-sm text-slate-600">
               {["Fiction", "Science", "History", "Technology"].map(
                 (category) => (
                   <li key={category}>
@@ -128,17 +132,17 @@ const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h3 className="mb-5 text-base font-bold sm:text-lg">
+            <h3 className="mb-3 md:mb-5 text-base font-bold sm:text-lg">
               Get In Touch
             </h3>
 
-            <p className="mb-5 text-sm leading-7 text-slate-600">
+            <p className="mb-5 text-sm leading-6 md:leading-7 text-slate-600">
               Have questions or suggestions? Feel free to contact us.
             </p>
 
             <a
               href="mailto:support@booknest.com"
-              className="inline-flex max-w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+              className="inline-flex max-w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2 md:py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
             >
               <FaEnvelope size={16} />
               Contact Us
@@ -149,7 +153,7 @@ const Footer = () => {
               <span>Available Online Worldwide</span>
             </div>
 
-            <div className="mt-4 flex items-center gap-2 text-sm text-slate-600">
+            <div className="mt-2 md:mt-4 flex items-center gap-2 text-sm text-slate-600">
               <FaBookOpen className="shrink-0 text-blue-600" />
               <span>Read More. Discover More.</span>
             </div>
@@ -157,10 +161,10 @@ const Footer = () => {
         </div>
 
         {/* Divider */}
-        <div className="my-6 border-t border-blue-200  sm:my-8" />
+        <div className="my-5 border-t border-blue-200 sm:my-8" />
 
         {/* Bottom Footer */}
-        <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
+        <div className="flex flex-col items-center justify-between gap-1 md:gap-5 text-center sm:flex-row sm:text-left">
           <p className="text-xs leading-6 text-slate-500 sm:text-sm">
             © {new Date().getFullYear()} BookNest. All rights reserved.
           </p>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { IBook } from "../../types/books";
+import { IBook } from "../../../types/books";
 import { BookOpen, User, ArrowUpRight, Library } from "lucide-react";
 
 const NewArrivals = () => {
@@ -38,26 +38,26 @@ const NewArrivals = () => {
 
   return (
     <section className="bg-slate-50 py-16">
-      <div className="mx-auto max-w-7xl px-4">
+      <div className="mx-auto max-w-7xl px-2 mdLpx-4">
         {/* Section Header */}
         <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
-            <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-blue-600">
+            <p className="mb-2 text-sm md:text-md font-semibold uppercase tracking-wider text-blue-600">
               Discover New Books
             </p>
 
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+            <h2 className="text-[26px] font-bold text-gray-900 sm:text-4xl">
               New Arrivals
             </h2>
 
-            <p className="mt-2 text-gray-500">
+            <p className="mt-2 text-gray-500 text-sm sm:text-sm md:text-md">
               Explore the latest books added to our library.
             </p>
           </div>
 
           <Link
             href="/all-books"
-            className="flex w-fit items-center gap-2 font-semibold text-blue-600 transition hover:gap-3 hover:text-blue-700"
+            className="flex w-fit text-sm md:text-md items-center border gap-2 font-semibold text-blue-600 transition hover:text-blue-700 px-4 py-2 hover:bg-white hover:border hover:border-slate-300 duration-300 rounded-md"
           >
             See All Books
             <ArrowUpRight size={19} />
@@ -135,7 +135,7 @@ const NewArrivals = () => {
                   </div>
 
                   {/* Description */}
-                  <p className="mb-5 line-clamp-2 min-h-10 text-sm leading-relaxed text-gray-500">
+                  <p className=" line-clamp-2 min-h-10 text-sm leading-relaxed text-gray-500">
                     {book.description}
                   </p>
 
@@ -155,7 +155,7 @@ const NewArrivals = () => {
                     {/* Details Button */}
                     <Link
                       href={`/all-books/${book._id}`}
-                      className="flex h-10 w-auto shrink-0 items-center justify-center gap-1 rounded-xl bg-blue-600 px-2 text-white transition-all duration-200 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-200"
+                      className="flex h-9 w-auto shrink-0 items-center justify-center gap-1 rounded-xl bg-blue-600 px-2 text-white transition-all duration-200 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-200"
                       aria-label={`View ${book.title} details`}
                     >
                       <span className="text-sm">View Details</span>
@@ -183,7 +183,7 @@ const NewArrivals = () => {
           <div className="mt-10 text-center">
             <Link
               href="/all-books"
-              className="inline-flex items-center text-sm gap-2 rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white shadow-md shadow-blue-100 transition-all hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-lg"
+              className="inline-flex items-center text-sm gap-2 rounded-xl bg-blue-600 px-4 md:px-6 py-2 md:py-3 font-semibold text-white shadow-md shadow-blue-100 transition-all hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-lg"
             >
               See All Books
               <ArrowUpRight size={19} />

@@ -109,25 +109,30 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
   if (!book) notFound();
 
   return (
-    <div className="mx-auto w-full max-w-6xl py-8 sm:py-12">
+    <div className="mx-auto w-full  max-w-6xl py-8 sm:py-12">
       {/* Breadcrumb */}
       <nav
         aria-label="Breadcrumb"
         className="mb-5 flex items-center gap-2 overflow-hidden text-sm text-gray-500"
       >
-        <Link href="/" className="shrink-0 hover:text-blue-600">
+        <Link href="/" className="shrink-0 hover:text-blue-600 text-xs md:sm">
           Home
         </Link>
 
         <span>/</span>
 
-        <Link href="/all-books" className="shrink-0 hover:text-blue-600">
+        <Link
+          href="/all-books"
+          className="shrink-0 hover:text-blue-600 text-xs md:text-sm"
+        >
           All Books
         </Link>
 
         <span>/</span>
 
-        <span className="truncate font-medium text-gray-900">{book.title}</span>
+        <span className="truncate font-medium text-gray-950 text-xs md:text-sm">
+          {book.title}
+        </span>
       </nav>
 
       <article className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl shadow-gray-200/60">
@@ -168,11 +173,11 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
               </span>
             </div>
 
-            <h1 className="mt-4 text-3xl font-extrabold leading-tight tracking-tight text-gray-900 sm:text-4xl">
+            <h1 className="mt-4 text-[26px] font-extrabold leading-tight tracking-tight text-gray-900 sm:text-4xl">
               {book.title}
             </h1>
 
-            <p className="mt-3 flex flex-wrap items-center gap-2 text-gray-500">
+            <p className="mt-2 md:mt-3 flex text-sm md:text-md flex-wrap items-center gap-2 text-gray-500">
               <User size={16} />
               Written by
               <span className="font-semibold text-gray-800">{book.author}</span>
@@ -248,7 +253,7 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
 
               <Link
                 href="/all-books"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-3.5 text-sm font-semibold text-gray-700 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 sm:w-auto"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-3 md:py-3.5 text-sm font-semibold text-gray-700 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 sm:w-auto"
               >
                 <ArrowLeft size={18} />
                 Back to All Books

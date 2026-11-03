@@ -85,7 +85,7 @@ const AllBooksContent = () => {
                 Discover Your Next Read
               </p>
 
-              <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+              <h1 className="text-[26px] font-bold text-gray-900 sm:text-4xl">
                 {category ? `${category} Books` : "All Books"}
               </h1>
 

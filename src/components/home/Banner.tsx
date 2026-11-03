@@ -17,13 +17,13 @@ import { useEffect, useState } from "react";
 const slides = [
   {
     id: "winter-sale",
-    eyebrow: "SPECIAL COLLECTION",
+    eyebrow: "A WORLD OF STORIES",
     title: "Discover Your Next Favorite Book",
-    highlight: "Up to 40% off bestsellers",
+    highlight: "Find Your Next Adventure",
     description:
-      "Explore amazing stories, discover bestselling titles, and make every reading moment unforgettable.",
+      "Step into fascinating worlds, uncover timeless stories, and discover books that inspire your imagination.",
     image: bannerImg1,
-    badge: "Reader's Favorite",
+    badge: "Editor's Choice",
     icon: TrendingUp,
   },
   {
@@ -67,7 +67,7 @@ const Banner = () => {
     );
   }
   return (
-    <section className="w-full py-5 sm:py-7">
+    <section className="w-full py-4 sm:py-7">
       <div className="">
         <Swiper
           modules={[Autoplay, Pagination]}
@@ -90,19 +90,19 @@ const Banner = () => {
               <SwiperSlide key={slide.id}>
                 <div className="grid min-h-[540px] grid-cols-1 overflow-hidden bg-[#f5f8ff] md:min-h-[430px] md:grid-cols-2 lg:min-h-[490px]">
                   {/* Left Content */}
-                  <div className="relative flex flex-col justify-center px-6 py-12 sm:px-10 sm:py-14 lg:px-16">
+                  <div className="relative flex flex-col justify-center px-4 py-12 sm:px-10 sm:py-14 lg:px-16">
                     {/* Decorative Background */}
                     <div className="pointer-events-none absolute -left-20 top-10 h-56 w-56 rounded-full bg-blue-100/50 blur-3xl" />
 
                     <div className="relative z-10">
                       {/* Eyebrow */}
-                      <div className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-blue-100 bg-white px-4 py-2 text-xs font-bold tracking-widest text-blue-600 shadow-sm">
+                      <div className="mb-5 inline-flex w-fit items-center justify-center pt-3 gap-2 rounded-full border border-blue-100 bg-white px-4 py-2 text-xs font-bold tracking-widest text-blue-600 shadow-sm">
                         <Sparkles size={14} />
                         {slide.eyebrow}
                       </div>
 
                       {/* Heading */}
-                      <h1 className="max-w-xl text-3xl font-extrabold leading-[1.2] tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+                      <h1 className="max-w-xl text-[26px] font-extrabold leading-[1.2] tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
                         {slide.title}
                       </h1>
 
@@ -112,7 +112,7 @@ const Banner = () => {
                       </p>
 
                       {/* Description */}
-                      <p className="mt-4 max-w-lg text-sm leading-7 text-slate-600 sm:text-base">
+                      <p className="mt-4 max-w-lg text-sm leading-6 md:leading-7 text-slate-600 sm:text-base">
                         {slide.description}
                       </p>
 
@@ -120,7 +120,7 @@ const Banner = () => {
                       <div className="mt-8 flex flex-wrap items-center gap-3">
                         <Link
                           href="/all-books"
-                          className="group inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-200 transition-all duration-300 hover:-translate-y-1 hover:bg-blue-700 hover:shadow-blue-300"
+                          className="group inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 md:px-6 mdLpy-3.5 text-sm font-bold text-white shadow-lg shadow-blue-200 transition-all duration-300 hover:-translate-y-1 hover:bg-blue-700 hover:shadow-blue-300"
                         >
                           Explore Books
                           <ArrowRight
@@ -130,10 +130,10 @@ const Banner = () => {
                         </Link>
 
                         <Link
-                          href="/register"
-                          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3.5 text-sm font-bold text-slate-700 transition-all hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
+                          href="/all-books"
+                          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 md:px-6 mdLpy-3.5 text-sm font-bold text-slate-700 transition-all hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
                         >
-                          Join Community
+                          Browse Books
                         </Link>
                       </div>
                     </div>

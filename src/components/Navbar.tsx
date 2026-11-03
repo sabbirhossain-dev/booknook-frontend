@@ -159,7 +159,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-slate-50 border-b border-gray-100">
+    <nav className="sticky top-0 z-50 w-full shadow-2xs bg-slate-50 border-b border-gray-100">
       <div>
         <div className="flex items-center justify-between py-3">
           {/* Logo - Left Side */}
@@ -300,7 +300,7 @@ const Navbar = () => {
 
           {/* Mobile Right Side: User Image + Menu Button */}
 
-          <div className="flex lg:hidden items-center gap-1">
+          <div className="flex lg:hidden items-center gap-3">
             {/* User Image */}
 
             {!isPending && user && (
@@ -309,7 +309,11 @@ const Navbar = () => {
                 onClick={() => setIsOpen(false)}
                 aria-label="View profile"
               >
-                <UserAvatar src={user.image} name={user.name} />
+                <UserAvatar
+                  src={user.image}
+                  name={user.name}
+                  className="w-8 h-8"
+                />
               </Link>
             )}
 
@@ -318,11 +322,11 @@ const Navbar = () => {
             <button
               type="button"
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition"
+              className="p-1.5 rounded-lg text-gray-700 hover:bg-gray-100 transition bg-slate-200"
               aria-label="Toggle menu"
               aria-expanded={isOpen}
             >
-              {isOpen ? <X size={28} /> : <Menu size={28} />}
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>

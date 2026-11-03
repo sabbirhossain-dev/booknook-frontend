@@ -28,16 +28,16 @@ const HowBorrowingWorks = () => {
   return (
     <section className="bg-white py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4">
-        <div className="mx-auto mb-12 max-w-2xl text-center">
+        <div className="mx-auto mb-12 text-start">
           <span className="text-sm font-bold uppercase tracking-wider text-blue-600">
             Simple & Easy
           </span>
 
-          <h2 className="mt-3 text-3xl font-bold text-gray-900 sm:text-4xl">
+          <h2 className="mt-2 md:mt-3 text-[26px] font-bold text-gray-900 sm:text-4xl">
             How Borrowing Works
           </h2>
 
-          <p className="mt-4 text-sm leading-7 text-gray-500 sm:text-base">
+          <p className="mt-2 md:mt-4 text-sm leading-5 md:leading-7 text-gray-500 sm:text-base">
             Getting your favorite book is easier than ever. Follow these three
             simple steps and start reading today.
           </p>
@@ -53,8 +53,8 @@ const HowBorrowingWorks = () => {
                 className="group relative rounded-2xl border border-gray-100 bg-slate-50 p-7 transition-all duration-300 hover:-translate-y-1 hover:border-blue-100 hover:bg-white hover:shadow-xl hover:shadow-blue-100/50"
               >
                 <div className="mb-6 flex items-center justify-between">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-100 text-blue-600 transition-colors group-hover:bg-blue-600 group-hover:text-white">
-                    <Icon size={27} />
+                  <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-xl bg-blue-100 text-blue-600 transition-colors group-hover:bg-blue-600 group-hover:text-white">
+                    <Icon size={25} />
                   </div>
 
                   <span className="text-3xl font-extrabold text-gray-200">
@@ -62,16 +62,16 @@ const HowBorrowingWorks = () => {
                   </span>
                 </div>
 
-                <h3 className="mb-3 text-xl font-bold text-gray-900">
+                <h3 className="mb-2 md:mb-3 text-xl font-bold text-gray-900">
                   {step.title}
                 </h3>
 
-                <p className="text-sm leading-7 text-gray-500">
+                <p className="text-sm leading-5 md:leading-7 text-gray-500">
                   {step.description}
                 </p>
 
                 {index !== 2 && (
-                  <div className="mt-6 hidden items-center gap-2 text-sm font-semibold text-blue-600 md:flex">
+                  <div className="mt-4 md:mt-6 hidden items-center gap-2 text-sm font-semibold text-blue-600 md:flex">
                     Step {index + 1}
                     <ArrowRight size={16} />
                   </div>

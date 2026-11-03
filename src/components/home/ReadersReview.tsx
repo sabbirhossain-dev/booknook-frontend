@@ -34,16 +34,16 @@ const ReaderReviews = () => {
   return (
     <section className="bg-white py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4">
-        <div className="mx-auto mb-12 max-w-2xl text-center">
+        <div className="mx-auto mb-12 ">
           <span className="text-sm font-bold uppercase tracking-wider text-blue-600">
             Community Feedback
           </span>
 
-          <h2 className="mt-3 text-3xl font-bold text-gray-900 sm:text-4xl">
+          <h2 className="mt-2 md:mt-3 text-[26px] font-bold text-gray-900 sm:text-4xl">
             What Our Readers Say
           </h2>
 
-          <p className="mt-4 text-sm leading-7 text-gray-500 sm:text-base">
+          <p className="mt-2 md:mt-4 text-sm leading-5 md:leading-7 text-gray-500 sm:text-base">
             Every book creates a new experience. Here is what readers think
             about their BookNook journey.
           </p>
