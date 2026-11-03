@@ -49,37 +49,51 @@ const MyBooksPage = () => {
     let isMounted = true;
 
     const fetchMyBooks = async () => {
-      const { data, error } = await authClient.token();
-      const token = data?.token;
-      console.log(token);
-
       try {
         setLoading(true);
+
+        // Get JWT token
+        const { data, error } = await authClient.token();
+
+        if (error || !data?.token) {
+          throw new Error("Authentication failed! Please login again.");
+        }
 
         const res = await fetch(
           `http://localhost:5000/my-book?email=${encodeURIComponent(userEmail)}`,
           {
+            method: "GET",
             headers: {
-              authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${data.token}`,
             },
             cache: "no-store",
           },
         );
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch your books");
-        }
+        const result = await res.json();
 
-        const data: IBook[] = await res.json();
+        if (!res.ok) {
+          throw new Error(result.message || "Failed to fetch your books");
+        }
 
         if (isMounted) {
-          setMyBooks(data);
+          setMyBooks(result);
         }
       } catch (error) {
-        console.error(error);
-        if (isMounted) toast.error("Could not load your books");
+        console.error("My Books Error:", error);
+
+        if (isMounted) {
+          setMyBooks([]);
+          toast.error(
+            error instanceof Error
+              ? error.message
+              : "Could not load your books",
+          );
+        }
       } finally {
-        if (isMounted) setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
@@ -97,12 +111,20 @@ const MyBooksPage = () => {
     try {
       setSaving(true);
 
+      // Get JWT token
+      const { data, error } = await authClient.token();
+
+      if (error || !data?.token) {
+        throw new Error("Authentication failed! Please login again.");
+      }
+
       const res = await fetch(
         `http://localhost:5000/books/${editingBook._id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${data.token}`,
           },
           body: JSON.stringify({
             ...editingBook,
@@ -117,6 +139,7 @@ const MyBooksPage = () => {
         throw new Error(result.message || "Failed to update book");
       }
 
+      // Update local state
       setMyBooks((previousBooks) =>
         previousBooks.map((book) =>
           book._id === editingBook._id ? editingBook : book,
@@ -124,8 +147,11 @@ const MyBooksPage = () => {
       );
 
       setEditingBook(null);
+
       toast.success("Book updated successfully!");
     } catch (error) {
+      console.error("Update Error:", error);
+
       toast.error(
         error instanceof Error ? error.message : "Something went wrong",
       );
@@ -147,10 +173,20 @@ const MyBooksPage = () => {
     try {
       setDeletingId(bookId);
 
+      // Get JWT token
+      const { data, error } = await authClient.token();
+
+      if (error || !data?.token) {
+        throw new Error("Authentication failed! Please login again.");
+      }
+
       const res = await fetch(
         `http://localhost:5000/books/${bookId}?email=${encodeURIComponent(userEmail)}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
         },
       );
 
@@ -160,12 +196,15 @@ const MyBooksPage = () => {
         throw new Error(result.message || "Failed to delete book");
       }
 
+      // Remove book from local state
       setMyBooks((previousBooks) =>
         previousBooks.filter((book) => book._id !== bookId),
       );
 
       toast.success("Book deleted successfully!");
     } catch (error) {
+      console.error("Delete Error:", error);
+
       toast.error(
         error instanceof Error ? error.message : "Something went wrong",
       );
@@ -174,6 +213,7 @@ const MyBooksPage = () => {
     }
   };
 
+  // Loading
   if (isPending || loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-50">
@@ -182,6 +222,7 @@ const MyBooksPage = () => {
     );
   }
 
+  // Not logged in
   if (!userEmail) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-50">
@@ -209,6 +250,7 @@ const MyBooksPage = () => {
             </p>
           </div>
 
+          {/* Total Books */}
           <div className="flex w-fit items-center gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
               <FaBookOpen size={21} />
@@ -216,6 +258,7 @@ const MyBooksPage = () => {
 
             <div>
               <p className="text-xs font-medium text-slate-500">Total Books</p>
+
               <p className="text-2xl font-bold text-slate-800">
                 {myBooks.length}
               </p>
@@ -314,9 +357,11 @@ const MyBooksPage = () => {
       {editingBook && (
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 p-4 backdrop-blur-sm">
           <div className="my-auto w-full max-w-lg rounded-2xl bg-white p-5 shadow-2xl sm:p-7">
+            {/* Modal Header */}
             <div className="mb-6 flex items-center justify-between">
               <div>
                 <h2 className="text-xl font-bold text-slate-800">Edit Book</h2>
+
                 <p className="mt-1 text-sm text-slate-500">
                   Update your book information.
                 </p>
@@ -331,6 +376,7 @@ const MyBooksPage = () => {
               </button>
             </div>
 
+            {/* Edit Form */}
             <form
               onSubmit={(event) => {
                 event.preventDefault();
@@ -338,10 +384,12 @@ const MyBooksPage = () => {
               }}
               className="space-y-4"
             >
+              {/* Book Title */}
               <div>
                 <label className="mb-1.5 block text-sm font-semibold text-slate-700">
                   Book Title
                 </label>
+
                 <input
                   required
                   value={editingBook.title}
@@ -355,10 +403,12 @@ const MyBooksPage = () => {
                 />
               </div>
 
+              {/* Author */}
               <div>
                 <label className="mb-1.5 block text-sm font-semibold text-slate-700">
                   Author
                 </label>
+
                 <input
                   required
                   value={editingBook.author}
@@ -372,10 +422,12 @@ const MyBooksPage = () => {
                 />
               </div>
 
+              {/* Category */}
               <div>
                 <label className="mb-1.5 block text-sm font-semibold text-slate-700">
                   Category
                 </label>
+
                 <input
                   required
                   value={editingBook.category}
@@ -389,10 +441,12 @@ const MyBooksPage = () => {
                 />
               </div>
 
+              {/* Image URL */}
               <div>
                 <label className="mb-1.5 block text-sm font-semibold text-slate-700">
                   Image URL
                 </label>
+
                 <input
                   type="url"
                   value={editingBook.image}
@@ -406,10 +460,12 @@ const MyBooksPage = () => {
                 />
               </div>
 
+              {/* Total Copies */}
               <div>
                 <label className="mb-1.5 block text-sm font-semibold text-slate-700">
                   Total Copies
                 </label>
+
                 <input
                   type="number"
                   min="0"
@@ -425,10 +481,12 @@ const MyBooksPage = () => {
                 />
               </div>
 
+              {/* Description */}
               <div>
                 <label className="mb-1.5 block text-sm font-semibold text-slate-700">
                   Description
                 </label>
+
                 <textarea
                   rows={4}
                   value={editingBook.description || ""}
@@ -442,6 +500,7 @@ const MyBooksPage = () => {
                 />
               </div>
 
+              {/* Modal Buttons */}
               <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row">
                 <button
                   type="button"

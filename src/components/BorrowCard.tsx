@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaCalendarAlt, FaUndo } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { authClient } from "@/lib/auth-client";
 
 interface IBorrow {
   _id: string;
@@ -17,35 +17,45 @@ interface IBorrow {
   borrowedAt: string;
 }
 
-const BorrowCard = ({ borrow }: { borrow: IBorrow }) => {
-  const router = useRouter();
+interface BorrowCardProps {
+  borrow: IBorrow;
+  onReturned: (id: string) => void;
+}
+
+const BorrowCard = ({ borrow, onReturned }: BorrowCardProps) => {
   const [loading, setLoading] = useState(false);
 
   const handleReturn = async () => {
-    // const confirmReturn = window.confirm(
-    //   "Are you sure you want to return this book?",
-    // );
-
-    // if (!confirmReturn) return;
-
     try {
       setLoading(true);
 
-      const res = await fetch(
-        `http://localhost:5000/borrows/${borrow._id}/return`,
-        { method: "PATCH" },
-      );
+      const { data, error } = await authClient.token();
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || "Failed to return book");
+      if (error || !data?.token) {
+        toast.error("Authentication failed!");
+        return;
       }
 
-      toast.success(data.message || "Book returned successfully!");
+      const res = await fetch(
+        `http://localhost:5000/borrows/${borrow._id}/return`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+        },
+      );
 
-      // Refresh server component data.
-      router.refresh();
+      const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.message || "Failed to return book");
+      }
+
+      toast.success(result.message || "Book returned successfully!");
+
+      // Immediately remove the returned book from the UI
+      onReturned(borrow._id);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Something went wrong";

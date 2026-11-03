@@ -99,8 +99,79 @@ const AddBookPage = () => {
   };
 
   // Submit book
+  // const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+
+  //   if (uploading) {
+  //     toast.error("Please wait for image upload to finish.");
+  //     return;
+  //   }
+
+  //   if (!imageUrl) {
+  //     toast.error("Please upload a book image first.");
+  //     return;
+  //   }
+
+  //   const form = e.currentTarget;
+
+  //   const formData = Object.fromEntries(new FormData(form).entries());
+
+  //   const bookData = {
+  //     ...formData,
+  //     totalCopies: Number(formData.totalCopies),
+  //     image: imageUrl,
+  //   };
+
+  //   try {
+  //     // Get JWT token
+  //     console.log("Getting token...");
+
+  //     const { data, error } = await authClient.token();
+
+  //     if (error || !data?.token) {
+  //       console.error("Token Error:", error);
+  //       toast.error("Authentication failed. Please login again.");
+  //       return;
+  //     }
+
+  //     const token = data.token;
+
+  //     console.log("Token received:", !!token);
+
+  //     // Send request to backend
+  //     const res = await fetch("http://localhost:5000/books", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       body: JSON.stringify(bookData),
+  //     });
+
+  //     const result = await res.json();
+
+  //     console.log("Backend Response:", result);
+
+  //     if (!res.ok) {
+  //       toast.error(result.message || "Failed to add book");
+  //       return;
+  //     }
+
+  //     toast.success("Book added successfully!");
+
+  //     form.reset();
+  //     setImageUrl("");
+  //   } catch (error) {
+  //     console.error("Add Book Error:", error);
+  //     toast.error("Something went wrong!");
+  //   }
+  // };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // IMPORTANT: Save form before any await
+    const form = e.currentTarget;
 
     if (uploading) {
       toast.error("Please wait for image upload to finish.");
@@ -112,37 +183,53 @@ const AddBookPage = () => {
       return;
     }
 
-    const form = e.currentTarget;
-    const formData = Object.fromEntries(new FormData(form).entries());
+    // Get form data before await
+    const formData = new FormData(form);
 
     const bookData = {
-      ...formData,
-      totalCopies: Number(formData.totalCopies),
+      title: formData.get("title"),
+      author: formData.get("author"),
+      category: formData.get("category"),
+      totalCopies: Number(formData.get("totalCopies")),
+      description: formData.get("description"),
+      userName: formData.get("userName"),
+      userEmail: formData.get("userEmail"),
       image: imageUrl,
     };
 
     try {
+      const { data, error } = await authClient.token();
+
+      if (error || !data?.token) {
+        console.error("Token Error:", error);
+        toast.error("Authentication failed!");
+        return;
+      }
+
+      const token = data.token;
+
       const res = await fetch("http://localhost:5000/books", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(bookData),
       });
 
       const result = await res.json();
 
+      console.log("6. Backend Response:", result);
+
       if (!res.ok) {
         toast.error(result.message || "Failed to add book");
         return;
       }
 
-      toast.success("Book added successfully!");
-
       form.reset();
       setImageUrl("");
     } catch (error) {
-      console.error(error);
+      console.error("Submit Error:", error);
       toast.error("Something went wrong!");
     }
   };

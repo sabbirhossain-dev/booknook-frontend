@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Loader2, CheckCircle2, User, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -21,53 +20,65 @@ interface BorrowButtonProps {
 }
 
 const BorrowButton = ({ book }: BorrowButtonProps) => {
-  const router = useRouter();
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [open, setOpen] = useState(false);
+
+  const isUnavailable = Number(book.totalCopies) <= 0;
 
   const handleBorrow = async () => {
-    if (!user) {
-      setError("Please login first to borrow a book.");
-      return;
-    }
-
-    setLoading(true);
-    setError("");
-
     try {
-      const borrowData = {
-        bookId: book._id,
-        userName: user.name,
-        userEmail: user.email.trim().toLowerCase(),
-      };
+      setLoading(true);
+      setError("");
 
+      // Get JWT token
+      const { data, error } = await authClient.token();
+
+      if (error || !data?.token) {
+        toast.error("Please login first!");
+        return;
+      }
+
+      const token = data.token;
+
+      // Borrow API request
       const res = await fetch("http://localhost:5000/borrows", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(borrowData),
+        body: JSON.stringify({
+          bookId: book._id,
+          title: book.title,
+          author: book.author,
+          image: book.image,
+          userName: user?.name,
+          userEmail: user?.email,
+        }),
       });
 
       const result = await res.json();
 
       if (!res.ok) {
-        throw new Error(result.message || "Borrow failed");
+        setError(result.message || "Failed to borrow book");
+        toast.error(result.message || "Failed to borrow book");
+        return;
       }
 
       setSuccess(true);
-      toast.success("Book borrowed successfully!");
+      setOpen(false);
 
-      router.refresh();
+      toast.success("Book borrowed successfully!");
     } catch (error) {
+      console.error("Borrow Error:", error);
+
       const message =
-        error instanceof Error
-          ? error.message
-          : "Unable to borrow this book. Try again.";
+        error instanceof Error ? error.message : "Something went wrong!";
 
       setError(message);
       toast.error(message);
@@ -77,18 +88,18 @@ const BorrowButton = ({ book }: BorrowButtonProps) => {
   };
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
         render={
           <Button
-            className={`h-12 w-full rounded-xl font-semibold text-white shadow-md sm:w-auto cursor-pointer ${
-              book.totalCopies <= 0
-                ? "bg-gray-500 shadow-gray-100 hover:bg-gray-600 px-6 text-gray-950"
-                : "bg-blue-600 px-6 shadow-blue-100 hover:bg-blue-700"
+            disabled={isUnavailable}
+            className={`h-12 w-full rounded-xl font-semibold shadow-md transition sm:w-auto ${
+              isUnavailable
+                ? "cursor-not-allowed bg-gray-200 px-6 text-gray-500 shadow-none hover:bg-gray-200"
+                : "cursor-pointer bg-blue-600 px-6 text-white shadow-blue-100 hover:bg-blue-700"
             }`}
-            disabled={book.totalCopies <= 0}
           >
-            {book.totalCopies <= 0 ? "Unavailable" : "Borrow Book"}
+            {isUnavailable ? "Unavailable" : "Borrow Book"}
           </Button>
         }
       />

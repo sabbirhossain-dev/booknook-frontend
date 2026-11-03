@@ -32,6 +32,7 @@ const MyBorrowsPage = () => {
     if (isPending) return;
 
     if (!userEmail) {
+      setActiveBorrows([]);
       setLoading(false);
       return;
     }
@@ -42,22 +43,12 @@ const MyBorrowsPage = () => {
       try {
         setLoading(true);
 
-        // Get JWT token
         const { data: tokenData, error } = await authClient.token();
 
         if (error || !tokenData?.token) {
-          console.error("Token Error:", error);
-
-          if (isMounted) {
-            setActiveBorrows([]);
-          }
-
-          return;
+          throw new Error("Authentication failed!");
         }
 
-        console.log("Frontend Token:", tokenData.token);
-
-        // Fetch user's borrowed books
         const res = await fetch("http://localhost:5000/my-borrows", {
           method: "GET",
           headers: {
@@ -67,8 +58,6 @@ const MyBorrowsPage = () => {
         });
 
         const responseData = await res.json();
-
-        console.log("Backend Response:", responseData);
 
         if (!res.ok) {
           throw new Error(responseData.message || "Failed to fetch borrows");
@@ -146,10 +135,7 @@ const MyBorrowsPage = () => {
               <p className="text-sm text-gray-500">Active Borrows</p>
 
               <p className="text-xl font-bold text-gray-800">
-                {
-                  activeBorrows.filter((borrow) => borrow.status === "borrowed")
-                    .length
-                }
+                {activeBorrows.length}
               </p>
             </div>
           </div>
@@ -159,7 +145,15 @@ const MyBorrowsPage = () => {
         <div className="flex flex-col gap-5">
           {activeBorrows.length > 0 ? (
             activeBorrows.map((borrow) => (
-              <BorrowCard key={borrow._id} borrow={borrow} />
+              <BorrowCard
+                key={borrow._id}
+                borrow={borrow}
+                onReturned={(id) => {
+                  setActiveBorrows((prev) =>
+                    prev.filter((item) => item._id !== id),
+                  );
+                }}
+              />
             ))
           ) : (
             <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-5 py-16 text-center">
