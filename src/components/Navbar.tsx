@@ -5,8 +5,9 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ChevronDown, LogOut, Menu, UserRound, X } from "lucide-react";
 
-import logo from "../../public/assets/logo.png";
 import Image from "next/image";
+import logo from "../../public/assets/logo.png";
+
 import { authClient } from "@/lib/auth-client";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
@@ -54,7 +55,6 @@ const UserAvatar = ({
 
 const NavbarSkeleton = () => (
   <>
-    {/* Desktop Skeleton */}
     <div className="hidden lg:flex items-center gap-8">
       {[1, 2, 3, 4, 5].map((item) => (
         <div
@@ -67,11 +67,6 @@ const NavbarSkeleton = () => (
     <div className="hidden lg:flex items-center gap-3">
       <div className="h-10 w-10 animate-pulse rounded-full bg-gray-200" />
       <div className="h-4 w-24 animate-pulse rounded-md bg-gray-200" />
-    </div>
-
-    {/* Mobile Skeleton */}
-    <div className="flex lg:hidden items-center gap-2">
-      <div className="h-10 w-10 animate-pulse rounded-lg bg-gray-200" />
     </div>
   </>
 );
@@ -102,7 +97,6 @@ const Navbar = () => {
     { name: "My Borrows", href: "/my-borrows" },
   ];
 
-  // Login থাকলে private links দেখাবে
   const visibleLinks = user ? [...navLinks, ...privateLinks] : navLinks;
 
   /* ---------- Active Route ---------- */
@@ -166,9 +160,9 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-slate-50 border-b border-gray-100">
-      <div className="">
+      <div>
         <div className="flex items-center justify-between py-3">
-          {/* Logo */}
+          {/* Logo - Left Side */}
 
           <Link href="/" className="flex items-center gap-2">
             <Image
@@ -211,8 +205,6 @@ const Navbar = () => {
           {!isPending &&
             (user ? (
               <div className="hidden lg:flex items-center gap-3">
-                {/* Profile Chip */}
-
                 <div ref={profileRef} className="relative">
                   <button
                     type="button"
@@ -245,8 +237,6 @@ const Navbar = () => {
                       aria-label="Profile menu"
                       className="absolute right-0 top-full mt-2 w-64 rounded-2xl border border-gray-100 bg-white p-2 shadow-xl shadow-gray-200/70"
                     >
-                      {/* User Summary */}
-
                       <div className="flex items-center gap-3 p-3">
                         <UserAvatar
                           src={user.image}
@@ -308,17 +298,33 @@ const Navbar = () => {
               </div>
             ))}
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Right Side: User Image + Menu Button */}
 
-          <button
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition"
-            aria-label="Toggle menu"
-            aria-expanded={isOpen}
-          >
-            {isOpen ? <X size={26} /> : <Menu size={26} />}
-          </button>
+          <div className="flex lg:hidden items-center gap-1">
+            {/* User Image */}
+
+            {!isPending && user && (
+              <Link
+                href="/profile"
+                onClick={() => setIsOpen(false)}
+                aria-label="View profile"
+              >
+                <UserAvatar src={user.image} name={user.name} />
+              </Link>
+            )}
+
+            {/* Mobile Menu Button */}
+
+            <button
+              type="button"
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition"
+              aria-label="Toggle menu"
+              aria-expanded={isOpen}
+            >
+              {isOpen ? <X size={28} /> : <Menu size={28} />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}

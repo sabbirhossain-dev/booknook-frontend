@@ -14,7 +14,7 @@ import {
 const Footer = () => {
   return (
     <footer className="bg-blue-50 text-blue-950">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-14 lg:px-8 lg:py-16">
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-8">
         {/* Main Footer */}
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           {/* Logo & Description */}
@@ -29,7 +29,7 @@ const Footer = () => {
               />
 
               <span className="text-2xl font-extrabold tracking-tight">
-                Book<span className="text-blue-600">Nest</span>
+                Book<span className="text-blue-600">Nook</span>
               </span>
             </Link>
 
@@ -96,8 +96,11 @@ const Footer = () => {
               </li>
 
               <li>
-                <Link href="/about" className="transition hover:text-blue-600">
-                  About Us
+                <Link
+                  href="/add-book"
+                  className="transition hover:text-blue-600"
+                >
+                  Add Book
                 </Link>
               </li>
             </ul>
@@ -154,7 +157,7 @@ const Footer = () => {
         </div>
 
         {/* Divider */}
-        <div className="my-10 border-t border-blue-200 sm:my-12" />
+        <div className="my-6 border-t border-blue-200  sm:my-8" />
 
         {/* Bottom Footer */}
         <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
