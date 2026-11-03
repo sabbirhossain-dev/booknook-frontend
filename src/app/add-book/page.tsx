@@ -208,7 +208,7 @@ const AddBookPage = () => {
 
       const token = data.token;
 
-      const res = await fetch("http://localhost:5000/books", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/books`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

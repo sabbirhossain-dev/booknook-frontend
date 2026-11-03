@@ -49,13 +49,16 @@ const MyBorrowsPage = () => {
           throw new Error("Authentication failed!");
         }
 
-        const res = await fetch("http://localhost:5000/my-borrows", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${tokenData.token}`,
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/my-borrows`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${tokenData.token}`,
+            },
+            cache: "no-store",
           },
-          cache: "no-store",
-        });
+        );
 
         const responseData = await res.json();
 

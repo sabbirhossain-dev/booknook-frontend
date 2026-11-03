@@ -37,7 +37,7 @@ const BorrowCard = ({ borrow, onReturned }: BorrowCardProps) => {
       }
 
       const res = await fetch(
-        `http://localhost:5000/borrows/${borrow._id}/return`,
+        `${process.env.NEXT_PUBLIC_API_URL}/borrows/${borrow._id}/return`,
         {
           method: "PATCH",
           headers: {

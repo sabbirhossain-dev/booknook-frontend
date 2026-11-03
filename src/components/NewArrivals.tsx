@@ -13,9 +13,12 @@ const NewArrivals = () => {
   useEffect(() => {
     const fetchLatestBooks = async () => {
       try {
-        const res = await fetch("http://localhost:5000/new-arrivals", {
-          cache: "no-store",
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/new-arrivals`,
+          {
+            cache: "no-store",
+          },
+        );
 
         if (!res.ok) {
           throw new Error("Failed to fetch latest books");

@@ -39,13 +39,16 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
     }
 
     // Fetch book details
-    const res = await fetch(`http://localhost:5000/books/${bookId}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${jwtToken.token}`,
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/books/${bookId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${jwtToken.token}`,
+        },
+        cache: "no-store",
       },
-      cache: "no-store",
-    });
+    );
 
     const result = await res.json();
 

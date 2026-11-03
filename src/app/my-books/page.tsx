@@ -60,7 +60,7 @@ const MyBooksPage = () => {
         }
 
         const res = await fetch(
-          `http://localhost:5000/my-book?email=${encodeURIComponent(userEmail)}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/my-book?email=${encodeURIComponent(userEmail)}`,
           {
             method: "GET",
             headers: {
@@ -119,7 +119,7 @@ const MyBooksPage = () => {
       }
 
       const res = await fetch(
-        `http://localhost:5000/books/${editingBook._id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/books/${editingBook._id}`,
         {
           method: "PUT",
           headers: {
@@ -181,7 +181,7 @@ const MyBooksPage = () => {
       }
 
       const res = await fetch(
-        `http://localhost:5000/books/${bookId}?email=${encodeURIComponent(userEmail)}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/books/${bookId}?email=${encodeURIComponent(userEmail)}`,
         {
           method: "DELETE",
           headers: {
