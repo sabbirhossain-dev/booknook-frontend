@@ -49,12 +49,21 @@ const MyBooksPage = () => {
     let isMounted = true;
 
     const fetchMyBooks = async () => {
+      const { data, error } = await authClient.token();
+      const token = data?.token;
+      console.log(token);
+
       try {
         setLoading(true);
 
         const res = await fetch(
           `http://localhost:5000/my-book?email=${encodeURIComponent(userEmail)}`,
-          { cache: "no-store" },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            cache: "no-store",
+          },
         );
 
         if (!res.ok) {

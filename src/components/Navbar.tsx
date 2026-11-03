@@ -176,6 +176,7 @@ const Navbar = () => {
               alt="BookNest Logo"
               width={40}
               height={40}
+              loading="eager"
               className="h-12 md:h-16 w-auto"
             />
           </Link>
