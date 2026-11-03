@@ -29,7 +29,12 @@ const MyBorrowsPage = () => {
   const userEmail = session?.user?.email;
 
   useEffect(() => {
-    if (isPending || !userEmail) return;
+    if (isPending) return;
+
+    if (!userEmail) {
+      setLoading(false);
+      return;
+    }
 
     let isMounted = true;
 
@@ -37,23 +42,40 @@ const MyBorrowsPage = () => {
       try {
         setLoading(true);
 
-        const res = await fetch(
-          `http://localhost:5000/my-borrows?email=${encodeURIComponent(
-            userEmail,
-          )}`,
-          {
-            cache: "no-store",
-          },
-        );
+        // Get JWT token
+        const { data: tokenData, error } = await authClient.token();
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch borrows");
+        if (error || !tokenData?.token) {
+          console.error("Token Error:", error);
+
+          if (isMounted) {
+            setActiveBorrows([]);
+          }
+
+          return;
         }
 
-        const data: IBorrow[] = await res.json();
+        console.log("Frontend Token:", tokenData.token);
+
+        // Fetch user's borrowed books
+        const res = await fetch("http://localhost:5000/my-borrows", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${tokenData.token}`,
+          },
+          cache: "no-store",
+        });
+
+        const responseData = await res.json();
+
+        console.log("Backend Response:", responseData);
+
+        if (!res.ok) {
+          throw new Error(responseData.message || "Failed to fetch borrows");
+        }
 
         if (isMounted) {
-          setActiveBorrows(data);
+          setActiveBorrows(responseData);
         }
       } catch (error) {
         console.error("My Borrows Error:", error);
@@ -75,14 +97,20 @@ const MyBorrowsPage = () => {
     };
   }, [userEmail, isPending]);
 
-  if (isPending || (userEmail && loading)) {
+  // Loading
+  if (isPending || loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#F8FAFC]">
-        <p className="text-gray-500">Loading your borrowed books...</p>
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-indigo-100 border-t-indigo-600" />
+
+          <p className="text-gray-500">Loading your borrowed books...</p>
+        </div>
       </div>
     );
   }
 
+  // Not logged in
   if (!userEmail) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#F8FAFC]">
@@ -118,7 +146,10 @@ const MyBorrowsPage = () => {
               <p className="text-sm text-gray-500">Active Borrows</p>
 
               <p className="text-xl font-bold text-gray-800">
-                {activeBorrows.length}
+                {
+                  activeBorrows.filter((borrow) => borrow.status === "borrowed")
+                    .length
+                }
               </p>
             </div>
           </div>

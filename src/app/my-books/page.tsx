@@ -60,7 +60,7 @@ const MyBooksPage = () => {
           `http://localhost:5000/my-book?email=${encodeURIComponent(userEmail)}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              authorization: `Bearer ${token}`,
             },
             cache: "no-store",
           },
