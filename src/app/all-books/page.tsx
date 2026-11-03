@@ -24,8 +24,9 @@ const AllBooksContent = () => {
         setError("");
 
         const url = category
-          ? `http://localhost:5000/books?category=${encodeURIComponent(category)}`
-          : "http://localhost:5000/books";
+          ? `${process.env.NEXT_PUBLIC_API_URL}/books?category=${encodeURIComponent(category)}`
+          : `${process.env.NEXT_PUBLIC_API_URL}/books`;
+        console.log("Books API URL:", url);
 
         const res = await fetch(url, {
           cache: "no-store",
