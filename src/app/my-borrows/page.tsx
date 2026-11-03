@@ -112,7 +112,7 @@ const MyBorrowsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] px-4 py-10 md:px-8">
+    <div className="min-h-screen bg-[#F8FAFC] px-2 py-10 md:px-8">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
@@ -121,7 +121,7 @@ const MyBorrowsPage = () => {
               Your Library
             </p>
 
-            <h1 className="text-3xl font-bold text-gray-800 md:text-4xl">
+            <h1 className="text-[26px] font-bold text-gray-800 md:text-4xl">
               My Borrows
             </h1>
 
@@ -131,13 +131,13 @@ const MyBorrowsPage = () => {
           </div>
 
           {/* Active Borrow Count */}
-          <div className="flex items-center gap-3 rounded-xl border bg-white px-5 py-3 shadow-sm">
+          <div className="flex items-center gap-4 rounded-xl border bg-white px-4 md:px-5 py-3 shadow-sm w-3/5 md:w-auto">
             <FaBookOpen className="text-2xl text-indigo-600" />
 
             <div>
               <p className="text-sm text-gray-500">Active Borrows</p>
 
-              <p className="text-xl font-bold text-gray-800">
+              <p className="text-lg md:text-xl font-bold text-center text-gray-800">
                 {activeBorrows.length}
               </p>
             </div>

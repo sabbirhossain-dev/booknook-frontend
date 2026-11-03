@@ -232,7 +232,7 @@ const MyBooksPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-10 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 px-2 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         {/* Header */}
         <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
@@ -241,7 +241,7 @@ const MyBooksPage = () => {
               Your Collection
             </p>
 
-            <h1 className="text-3xl font-extrabold text-slate-800 sm:text-4xl">
+            <h1 className="text-[26px] font-extrabold text-slate-800 sm:text-4xl">
               My Books
             </h1>
 
@@ -251,7 +251,7 @@ const MyBooksPage = () => {
           </div>
 
           {/* Total Books */}
-          <div className="flex w-fit items-center gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
+          <div className="flex w-fit items-center gap-4 rounded-2xl border border-slate-200 bg-white px-3 md:px-5 py-2 md:py-4 shadow-sm">
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
               <FaBookOpen size={21} />
             </div>
@@ -259,7 +259,7 @@ const MyBooksPage = () => {
             <div>
               <p className="text-xs font-medium text-slate-500">Total Books</p>
 
-              <p className="text-2xl font-bold text-slate-800">
+              <p className="text-lg md:text-2xl text-center font-bold text-slate-800">
                 {myBooks.length}
               </p>
             </div>
@@ -308,11 +308,11 @@ const MyBooksPage = () => {
                       </span>
                     </div>
 
-                    <h2 className="text-xl font-bold text-slate-800 sm:text-2xl">
+                    <h2 className="text-lg md:text-xl font-bold text-slate-800 sm:text-2xl">
                       {book.title}
                     </h2>
 
-                    <p className="mt-2 flex items-center gap-2 text-sm text-slate-500">
+                    <p className="mt-2 flex items-center gap-2 text-xs md:text-sm text-slate-500">
                       <FaUser className="text-indigo-500" />
                       {book.author}
                     </p>
@@ -321,17 +321,17 @@ const MyBooksPage = () => {
                       {book.description || "No description available."}
                     </p>
 
-                    <div className="mt-4 flex items-center gap-2 text-xs font-medium text-slate-400">
+                    {/* <div className="mt-4 flex items-center gap-2 text-xs font-medium text-slate-400">
                       <FaLayerGroup />
                       <span>Book ID: {book._id}</span>
-                    </div>
+                    </div> */}
                   </div>
 
                   {/* Action Buttons */}
                   <div className="flex shrink-0 gap-3 border-t border-slate-100 pt-4 md:w-32 md:flex-col md:border-l md:border-t-0 md:pl-5 md:pt-0">
                     <button
                       onClick={() => setEditingBook({ ...book })}
-                      className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 md:w-full"
+                      className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-3 md:px-4 py-2 md:py-3 text-sm font-semibold cursor-pointer text-white transition hover:bg-indigo-700 md:w-full"
                     >
                       <FaEdit />
                       Edit
@@ -340,7 +340,7 @@ const MyBooksPage = () => {
                     <button
                       onClick={() => handleDelete(book._id)}
                       disabled={deletingId === book._id}
-                      className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50 md:w-full"
+                      className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-red-50 cursor-pointer px-3 md:px-4 py-2 md:py-3 text-sm font-semibold text-red-600 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50 md:w-full"
                     >
                       <FaTrash />
                       {deletingId === book._id ? "Deleting..." : "Delete"}

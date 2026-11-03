@@ -33,7 +33,7 @@ const categories = [
 ];
 
 const inputClass =
-  "w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition";
+  "w-full pl-11 pr-4 py-2 md:py-3 bg-white border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition";
 
 const labelClass = "block text-sm font-semibold text-gray-700 mb-2";
 
@@ -235,23 +235,23 @@ const AddBookPage = () => {
   };
 
   return (
-    <div className="mx-auto w-full max-w-4xl py-10 sm:py-14 px-4">
+    <div className="mx-auto w-full max-w-4xl py-10 sm:py-14  md:px-4">
       {/* Header */}
-      <header className="relative overflow-hidden rounded-3xl border border-blue-100/70 bg-gradient-to-b from-blue-50 via-white to-white px-6 py-10 text-center sm:py-12">
+      <header className="relative overflow-hidden rounded-3xl border border-blue-100/70 bg-gradient-to-b from-blue-50 via-white to-white px-6 py-6 md:py-10 text-center sm:py-12">
         <div className="pointer-events-none absolute -left-16 -top-10 h-48 w-48 rounded-full bg-blue-100/60 blur-3xl" />
 
         <div className="pointer-events-none absolute -bottom-14 -right-12 h-52 w-52 rounded-full bg-indigo-100/60 blur-3xl" />
 
         <div className="relative z-10">
-          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-200">
+          <div className="mx-auto mb-3 md:mb-5 flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-200">
             <BookOpen size={26} />
           </div>
 
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+          <h1 className="text-[26px] font-extrabold tracking-tight text-slate-900 sm:text-4xl">
             Add a Book
           </h1>
 
-          <p className="mt-3 text-gray-500 sm:text-lg">
+          <p className="mt-2 md:mt-3 text-sm text-gray-500 sm:text-lg">
             Put a book from your shelf into the library.
           </p>
         </div>
@@ -260,7 +260,7 @@ const AddBookPage = () => {
       {/* Form Card */}
       <form
         onSubmit={handleSubmit}
-        className="mt-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-xl shadow-gray-200/60 sm:p-8"
+        className="mt-6 rounded-2xl border border-gray-100 bg-white p-4 md:p-6 shadow-xl shadow-gray-200/60 sm:p-8"
       >
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6">
           {/* Book Title */}
@@ -372,11 +372,11 @@ const AddBookPage = () => {
                 </div>
 
                 <div className="text-center">
-                  <p className="font-semibold text-gray-700">
+                  <p className="font-semibold text-gray-700 text-sm md:text-md">
                     Upload your book cover
                   </p>
 
-                  <p className="mt-1 text-xs text-gray-400">
+                  <p className="mt-1 text-xs text-gray-400 md:text-sm">
                     PNG, JPG or WEBP (Maximum 5MB)
                   </p>
                 </div>
@@ -393,7 +393,7 @@ const AddBookPage = () => {
                       handleImageUpload(file);
                     }
                   }}
-                  className="w-full max-w-sm cursor-pointer rounded-lg border border-gray-200 bg-white text-sm text-gray-600 file:mr-4 file:cursor-pointer file:border-0 file:bg-blue-50 file:px-4 file:py-3 file:font-semibold file:text-blue-600 hover:file:bg-blue-100 disabled:opacity-50"
+                  className="w-full max-w-sm cursor-pointer rounded-lg border border-gray-200 bg-white text-sm text-gray-600 file:mr-4 file:cursor-pointer file:border-0 file:bg-blue-50 file:px-3 file:md:px-4 file:py-3 file:font-semibold file:text-blue-600 hover:file:bg-blue-100 disabled:opacity-50"
                 />
 
                 {/* Uploading */}
@@ -418,7 +418,7 @@ const AddBookPage = () => {
                       />
                     </div>
 
-                    <p className="mt-3 flex items-center gap-2 text-sm font-medium text-emerald-600">
+                    <p className="mt-3 flex items-center gap-2 text-xs md:text-sm font-medium text-emerald-600">
                       <CheckCircle2 size={17} />
                       Image uploaded successfully!
                     </p>
@@ -449,7 +449,7 @@ const AddBookPage = () => {
                 name="description"
                 rows={4}
                 placeholder="A short, inviting summary that makes readers want to pick this book up..."
-                className={`${inputClass} min-h-32 resize-y pl-11 leading-6`}
+                className={`${inputClass} text-sm md:text-md min-h-32 resize-y pl-11 leading-6`}
                 required
               />
             </div>
@@ -473,7 +473,7 @@ const AddBookPage = () => {
                 type="text"
                 value={user?.name || ""}
                 readOnly
-                className={`${inputClass} cursor-not-allowed bg-gray-50 text-gray-600`}
+                className={`${inputClass} text-sm md:text-md cursor-not-allowed bg-gray-50 text-gray-600`}
               />
             </div>
           </div>
@@ -496,7 +496,7 @@ const AddBookPage = () => {
                 type="email"
                 value={user?.email || ""}
                 readOnly
-                className={`${inputClass} cursor-not-allowed bg-gray-50 text-gray-600`}
+                className={`${inputClass} text-sm md:text-md cursor-not-allowed bg-gray-50 text-gray-600`}
               />
             </div>
           </div>
@@ -512,7 +512,7 @@ const AddBookPage = () => {
         <button
           type="submit"
           disabled={uploading || !imageUrl || !user}
-          className="mt-7 flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3.5 font-semibold text-white shadow-lg shadow-blue-200 transition duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
+          className="mt-7 flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-2.5 md:py-3.5 text-sm md:text-lg font-semibold text-white shadow-lg shadow-blue-200 transition duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
         >
           {uploading ? (
             <>

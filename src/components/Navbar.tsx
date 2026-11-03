@@ -322,7 +322,7 @@ const Navbar = () => {
             <button
               type="button"
               onClick={() => setIsOpen(!isOpen)}
-              className="p-1.5 rounded-lg text-gray-700 hover:bg-gray-100 transition bg-slate-200"
+              className="p-1.5 rounded-lg text-gray-700 hover:bg-gray-100 transition bg-slate-200 cursor-pointer"
               aria-label="Toggle menu"
               aria-expanded={isOpen}
             >

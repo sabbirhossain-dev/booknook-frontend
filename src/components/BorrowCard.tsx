@@ -87,14 +87,16 @@ const BorrowCard = ({ borrow, onReturned }: BorrowCardProps) => {
               {borrow.category}
             </span>
 
-            <h2 className="mt-3 text-xl font-bold text-gray-800">
+            <h2 className="mt-3 text-lg md:text-xl font-bold text-gray-800">
               {borrow.bookTitle}
             </h2>
 
-            <p className="mt-1 text-sm text-gray-500">By {borrow.author}</p>
+            <p className="mt-1 text-xs md:text-sm text-gray-500">
+              By {borrow.author}
+            </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+          <div className="flex flex-wrap items-center gap-4 text-xs md:text-sm text-gray-500">
             <span className="flex items-center gap-2">
               <FaCalendarAlt className="text-indigo-500" />
               {new Date(borrow.borrowedAt).toLocaleDateString()}
@@ -112,7 +114,7 @@ const BorrowCard = ({ borrow, onReturned }: BorrowCardProps) => {
             <button
               onClick={handleReturn}
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-green-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-green-600 px-4 md:px-6 py-2 md:py-3 text-sm font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
             >
               <FaUndo />
               {loading ? "Returning..." : "Return Book"}
