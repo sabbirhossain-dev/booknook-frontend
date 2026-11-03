@@ -80,8 +80,15 @@ const BorrowButton = ({ book }: BorrowButtonProps) => {
     <Popover>
       <PopoverTrigger
         render={
-          <Button className="h-12 w-full rounded-xl bg-blue-600 px-6 font-semibold text-white shadow-md shadow-blue-100 hover:bg-blue-700 sm:w-auto">
-            Borrow Book
+          <Button
+            className={`h-12 w-full rounded-xl font-semibold text-white shadow-md sm:w-auto cursor-pointer ${
+              book.totalCopies <= 0
+                ? "bg-gray-500 shadow-gray-100 hover:bg-gray-600 px-6 text-gray-950"
+                : "bg-blue-600 px-6 shadow-blue-100 hover:bg-blue-700"
+            }`}
+            disabled={book.totalCopies <= 0}
+          >
+            {book.totalCopies <= 0 ? "Unavailable" : "Borrow Book"}
           </Button>
         }
       />

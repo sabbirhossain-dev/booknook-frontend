@@ -44,7 +44,7 @@ const BookCard = ({ book }: BookCardProps) => {
       </div>
 
       {/* Book Information */}
-      <div className="flex flex-1 flex-col p-5">
+      <div className="flex flex-1 flex-col p-3">
         {/* Title & Author */}
         <div className="mb-3">
           <h2 className="line-clamp-1 text-lg font-bold text-gray-900 transition-colors group-hover:text-blue-600">
@@ -78,9 +78,10 @@ const BookCard = ({ book }: BookCardProps) => {
           {/* Details Button */}
           <Link
             href={`/all-books/${book._id}`}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white transition-all duration-200 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-200"
+            className="flex h-10 px-2 w-auto shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white transition-all duration-200 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-200"
             aria-label={`View ${book.title} details`}
           >
+            <span className="text-sm">View Details</span>
             <ArrowUpRight size={19} />
           </Link>
         </div>

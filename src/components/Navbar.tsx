@@ -2,15 +2,17 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ChevronDown, LogOut, Menu, UserRound, X } from "lucide-react";
+
 import logo from "../../public/assets/logo.png";
 import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 
-/* ---------- Profile Avatar (with initials fallback) ---------- */
+/* ---------- Profile Avatar ---------- */
+
 const getInitials = (name: string) =>
   name
     .trim()
@@ -48,65 +50,126 @@ const UserAvatar = ({
     </span>
   );
 
+/* ---------- Navbar Skeleton ---------- */
+
+const NavbarSkeleton = () => (
+  <>
+    {/* Desktop Skeleton */}
+    <div className="hidden lg:flex items-center gap-8">
+      {[1, 2, 3, 4, 5].map((item) => (
+        <div
+          key={item}
+          className="h-4 w-16 animate-pulse rounded-md bg-gray-200"
+        />
+      ))}
+    </div>
+
+    <div className="hidden lg:flex items-center gap-3">
+      <div className="h-10 w-10 animate-pulse rounded-full bg-gray-200" />
+      <div className="h-4 w-24 animate-pulse rounded-md bg-gray-200" />
+    </div>
+
+    {/* Mobile Skeleton */}
+    <div className="flex lg:hidden items-center gap-2">
+      <div className="h-10 w-10 animate-pulse rounded-lg bg-gray-200" />
+    </div>
+  </>
+);
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+
   const profileRef = useRef<HTMLDivElement>(null);
+
   const pathname = usePathname();
+  const router = useRouter();
 
-  /* Close the profile popup on outside click / Escape */
-  useEffect(() => {
-    if (!isProfileOpen) return;
+  const { data: session, isPending } = authClient.useSession();
 
-    const handleMouseDown = (event: MouseEvent) => {
-      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
-        setIsProfileOpen(false);
-      }
-    };
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsProfileOpen(false);
-    };
+  const user = session?.user;
 
-    document.addEventListener("mousedown", handleMouseDown);
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("mousedown", handleMouseDown);
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isProfileOpen]);
+  /* ---------- Navigation Links ---------- */
 
-  const handleSignOut = async () => {
-    setIsProfileOpen(false);
-    setIsOpen(false);
-    const { error } = await authClient.signOut();
-    if (error) {
-      toast.error("Failed to sign out.");
-    } else {
-      toast.success("Signed out successfully.");
-    }
-  };
+  const navLinks = [
+    { name: "Home", href: "/" },
+    { name: "All Books", href: "/all-books" },
+  ];
+
+  const privateLinks = [
+    { name: "Add Book", href: "/add-book" },
+    { name: "My Books", href: "/my-books" },
+    { name: "My Borrows", href: "/my-borrows" },
+  ];
+
+  // Login থাকলে private links দেখাবে
+  const visibleLinks = user ? [...navLinks, ...privateLinks] : navLinks;
+
+  /* ---------- Active Route ---------- */
 
   const isActive = (href: string) =>
     href === "/"
       ? pathname === "/"
       : pathname === href || pathname.startsWith(`${href}/`);
 
-  const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "All Books", href: "/all-books" },
-    { name: "Add Book", href: "/add-book" },
-    { name: "My Books", href: "/my-books" },
-    { name: "My Borrows", href: "/my-borrows" },
-  ];
+  /* ---------- Close Profile Popup ---------- */
 
-  const { data: session, isPending } = authClient.useSession();
-  const user = session?.user;
+  useEffect(() => {
+    if (!isProfileOpen) return;
+
+    const handleMouseDown = (event: MouseEvent) => {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(event.target as Node)
+      ) {
+        setIsProfileOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsProfileOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleMouseDown);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("mousedown", handleMouseDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isProfileOpen]);
+
+  /* ---------- Close Mobile Menu on Route Change ---------- */
+
+  useEffect(() => {
+    setIsOpen(false);
+    setIsProfileOpen(false);
+  }, [pathname]);
+
+  /* ---------- Sign Out ---------- */
+
+  const handleSignOut = async () => {
+    setIsProfileOpen(false);
+    setIsOpen(false);
+
+    const { error } = await authClient.signOut();
+
+    if (error) {
+      toast.error("Failed to sign out.");
+    } else {
+      toast.success("Signed out successfully.");
+      router.push("/");
+    }
+  };
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-slate-50 border-b border-gray-100">
       <div className="">
         <div className="flex items-center justify-between py-3">
           {/* Logo */}
+
           <Link href="/" className="flex items-center gap-2">
             <Image
               src={logo}
@@ -118,28 +181,37 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                aria-current={isActive(link.href) ? "page" : undefined}
-                className={`relative py-2 text-sm font-medium transition duration-200 ${
-                  isActive(link.href)
-                    ? "text-blue-600 after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-blue-600"
-                    : "text-gray-600 hover:text-blue-600"
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
-          </div>
+
+          {!isPending && (
+            <div className="hidden lg:flex items-center gap-8">
+              {visibleLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  aria-current={isActive(link.href) ? "page" : undefined}
+                  className={`relative py-2 text-sm font-medium transition duration-200 ${
+                    isActive(link.href)
+                      ? "text-blue-600 after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-blue-600"
+                      : "text-gray-600 hover:text-blue-600"
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {/* Desktop Skeleton */}
+
+          {isPending && <NavbarSkeleton />}
 
           {/* Desktop Buttons */}
+
           {!isPending &&
             (user ? (
               <div className="hidden lg:flex items-center gap-3">
-                {/* Profile chip → opens popup */}
+                {/* Profile Chip */}
+
                 <div ref={profileRef} className="relative">
                   <button
                     type="button"
@@ -150,36 +222,42 @@ const Navbar = () => {
                     className="group flex items-center gap-2.5 rounded-full border border-gray-200 bg-white py-1 pl-1 pr-3 hover:border-blue-200 hover:bg-blue-50 transition"
                   >
                     <UserAvatar src={user.image} name={user.name} />
+
                     <span className="text-sm font-semibold text-gray-700 group-hover:text-blue-600 transition">
                       {user.name}
                     </span>
+
                     <ChevronDown
                       size={16}
                       className={cn(
                         "text-gray-400 transition-transform duration-200",
-                        isProfileOpen && "rotate-180 text-blue-600"
+                        isProfileOpen && "rotate-180 text-blue-600",
                       )}
                     />
                   </button>
 
-                  {/* Popup */}
+                  {/* Profile Popup */}
+
                   {isProfileOpen && (
                     <div
                       role="menu"
                       aria-label="Profile menu"
                       className="absolute right-0 top-full mt-2 w-64 rounded-2xl border border-gray-100 bg-white p-2 shadow-xl shadow-gray-200/70"
                     >
-                      {/* User summary */}
+                      {/* User Summary */}
+
                       <div className="flex items-center gap-3 p-3">
                         <UserAvatar
                           src={user.image}
                           name={user.name}
                           className="h-11 w-11"
                         />
+
                         <div className="min-w-0">
                           <p className="truncate text-sm font-semibold text-gray-900">
                             {user.name}
                           </p>
+
                           <p className="truncate text-xs text-gray-500">
                             {user.email}
                           </p>
@@ -230,7 +308,9 @@ const Navbar = () => {
             ))}
 
           {/* Mobile Menu Button */}
+
           <button
+            type="button"
             onClick={() => setIsOpen(!isOpen)}
             className="lg:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition"
             aria-label="Toggle menu"
@@ -241,10 +321,13 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Navigation */}
+
         {isOpen && (
           <div className="lg:hidden border-t border-gray-100 py-5">
             <div className="flex flex-col gap-1">
-              {navLinks.map((link) => (
+              {/* Public + Private Links */}
+
+              {visibleLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
@@ -261,52 +344,63 @@ const Navbar = () => {
               ))}
             </div>
 
-            {!isPending &&
-              (user ? (
-                <div className="flex flex-col gap-3 mt-4 px-4">
-                  {/* Clickable profile → /profile */}
-                  <Link
-                    href="/profile"
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-3 p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition"
-                  >
-                    <UserAvatar src={user.image} name={user.name} />
-                    <span className="flex flex-col">
-                      <span className="font-semibold text-gray-900 leading-tight">
-                        {user.name}
-                      </span>
-                      <span className="text-xs text-blue-600">
-                        View profile
-                      </span>
+            {/* Mobile Auth Section */}
+
+            {isPending ? (
+              <div className="mt-4 flex flex-col gap-3 px-4">
+                <div className="h-12 w-full animate-pulse rounded-lg bg-gray-200" />
+                <div className="h-12 w-full animate-pulse rounded-lg bg-gray-200" />
+              </div>
+            ) : user ? (
+              <div className="flex flex-col gap-3 mt-4 px-4">
+                {/* Profile */}
+
+                <Link
+                  href="/profile"
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center gap-3 p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition"
+                >
+                  <UserAvatar src={user.image} name={user.name} />
+
+                  <span className="flex flex-col min-w-0">
+                    <span className="font-semibold text-gray-900 leading-tight truncate">
+                      {user.name}
                     </span>
-                  </Link>
 
-                  <button
-                    onClick={handleSignOut}
-                    className="text-center border border-gray-200 py-3 rounded-lg font-semibold text-gray-700 hover:bg-gray-50 transition"
-                  >
-                    Sign Out
-                  </button>
-                </div>
-              ) : (
-                <div className="flex flex-col gap-3 mt-4 px-4">
-                  <Link
-                    href="/login"
-                    onClick={() => setIsOpen(false)}
-                    className="text-center border border-gray-200 py-3 rounded-lg font-semibold text-gray-700 hover:bg-gray-50"
-                  >
-                    Login
-                  </Link>
+                    <span className="text-xs text-blue-600">View profile</span>
+                  </span>
+                </Link>
 
-                  <Link
-                    href="/sign-up"
-                    onClick={() => setIsOpen(false)}
-                    className="text-center bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
-                  >
-                    Sign Up
-                  </Link>
-                </div>
-              ))}
+                {/* Sign Out */}
+
+                <button
+                  type="button"
+                  onClick={handleSignOut}
+                  className="flex items-center justify-center gap-2 text-center border border-gray-200 py-3 rounded-lg font-semibold text-gray-700 hover:bg-gray-50 transition"
+                >
+                  <LogOut size={18} />
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3 mt-4 px-4">
+                <Link
+                  href="/login"
+                  onClick={() => setIsOpen(false)}
+                  className="text-center border border-gray-200 py-3 rounded-lg font-semibold text-gray-700 hover:bg-gray-50"
+                >
+                  Login
+                </Link>
+
+                <Link
+                  href="/sign-up"
+                  onClick={() => setIsOpen(false)}
+                  className="text-center bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
           </div>
         )}
       </div>
