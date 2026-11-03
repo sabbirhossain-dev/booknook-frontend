@@ -78,7 +78,7 @@ const BookCard = ({ book }: BookCardProps) => {
           {/* Details Button */}
           <Link
             href={`/all-books/${book._id}`}
-            className="flex h-10 px-2 w-auto shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white transition-all duration-200 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-200"
+            className="flex h-8 px-4 w-auto shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white transition-all duration-200 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-200"
             aria-label={`View ${book.title} details`}
           >
             <span className="text-sm">View Details</span>
