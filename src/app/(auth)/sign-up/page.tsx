@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import {
   User,
@@ -39,34 +39,22 @@ const InputIcon = ({ icon: Icon }: { icon: React.ElementType }) => (
   />
 );
 
-const SignUpPage = () => {
+// Main Signup Form
+const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
-  const hasUppercase = /[A-Z]/.test(password);
-  const hasLowercase = /[a-z]/.test(password);
-  const hasMinLength = password.length >= 6;
-
-  const isPasswordValid = hasUppercase && hasLowercase && hasMinLength;
-
-  const passwordsMatch =
-    confirmPassword.length > 0 && password === confirmPassword;
-
-  const isFormValid = isPasswordValid && passwordsMatch;
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
-
-  // CHANGED 1:
-  // আগের protected page-এর callbackUrl গ্রহণ করছি।
   const searchParams = useSearchParams();
 
+  // Previous protected page callback URL
   const callbackUrl = searchParams.get("callbackUrl");
 
-  // CHANGED 2:
-  // Safe redirect URL তৈরি করছি।
+  // Safe callback URL validation
   const getSafeCallbackUrl = () => {
     if (
       callbackUrl &&
@@ -80,18 +68,32 @@ const SignUpPage = () => {
     return "/";
   };
 
-  // CHANGED 3:
-  // Signup-এর পর Login page-এ callbackUrl পাঠাব।
+  // Login URL with callback URL
   const getLoginUrl = () => {
     const loginUrl = new URL("/login", window.location.origin);
 
-    if (callbackUrl) {
-      loginUrl.searchParams.set("callbackUrl", getSafeCallbackUrl());
+    const safeUrl = getSafeCallbackUrl();
+
+    if (safeUrl !== "/") {
+      loginUrl.searchParams.set("callbackUrl", safeUrl);
     }
 
     return loginUrl.pathname + loginUrl.search;
   };
 
+  // Password Validation
+  const hasUppercase = /[A-Z]/.test(password);
+  const hasLowercase = /[a-z]/.test(password);
+  const hasMinLength = password.length >= 6;
+
+  const isPasswordValid = hasUppercase && hasLowercase && hasMinLength;
+
+  const passwordsMatch =
+    confirmPassword.length > 0 && password === confirmPassword;
+
+  const isFormValid = isPasswordValid && passwordsMatch;
+
+  // Handle Registration
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -99,6 +101,10 @@ const SignUpPage = () => {
       toast.error("Please fulfill all password requirements!");
       return;
     }
+
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
 
     const formatData = new FormData(e.currentTarget);
 
@@ -115,10 +121,6 @@ const SignUpPage = () => {
         email: formData.email,
         password: formData.password,
         image: formData.image || undefined,
-
-        // CHANGED 4:
-        // আগের callbackURL: "/dashboard" সরিয়ে দেওয়া হয়েছে।
-        // Email signup-এর পর আমরা আলাদাভাবে Login page-এ যাব।
       });
 
       if (error) {
@@ -127,32 +129,26 @@ const SignUpPage = () => {
       }
 
       if (data) {
-        // Navbar-এ user দেখানোর পরিবর্তে loading দেখানোর জন্য
         toast.success("Registration successful!");
 
-        // Automatically created session sign out
+        // Automatically created session থেকে sign out
         await authClient.signOut();
 
-        // Login page-এ পাঠাবে
-        router.replace("/login");
+        // Login page-এ redirect
+        // Callback URL থাকলে সেটিও preserve হবে
+        router.replace(getLoginUrl());
       }
     } catch (error) {
       console.error("Registration error:", error);
       toast.error("Something went wrong!");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
+  // Google Signup
   const handleGoogleSignIn = async () => {
     try {
-      // Google OAuth signup/login একসাথেই authentication করে।
-      // তাই Google login-এর পর original destination-এ পাঠানো হবে।
-      // তাই Google login-এর পর original destination-এ পাঠানো হবে।
-      // তাই Google login-এর পর original destination-এ পাঠানো হবে।
-      // তাই Google login-এর পর original destination-এ পাঠানো হবে।
-      // তাই Google login-এর পর original destination-এ পাঠানো হবে।
-      // তাই Google login-এর পর original destination-এ পাঠানো হবে।
-      // তাই Google login-এর পর original destination-এ পাঠানো হবে।
-
       await authClient.signIn.social({
         provider: "google",
         callbackURL: getSafeCallbackUrl(),
@@ -276,7 +272,7 @@ const SignUpPage = () => {
                 </button>
               </div>
 
-              {/* Password Validation Messages */}
+              {/* Password Requirements */}
               {password.length > 0 && !isPasswordValid && (
                 <div className="mt-3 space-y-2">
                   {!hasUppercase && (
@@ -364,10 +360,10 @@ const SignUpPage = () => {
             {/* Register Button */}
             <button
               type="submit"
-              disabled={!isFormValid}
+              disabled={!isFormValid || isSubmitting}
               className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition duration-200 shadow-lg shadow-blue-200 disabled:shadow-none cursor-pointer"
             >
-              Create Account
+              {isSubmitting ? "Creating Account..." : "Create Account"}
             </button>
           </form>
 
@@ -430,6 +426,21 @@ const SignUpPage = () => {
         </p>
       </div>
     </div>
+  );
+};
+
+// Page Component with Suspense
+const SignUpPage = () => {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-slate-50">
+          <p className="text-gray-500">Loading...</p>
+        </div>
+      }
+    >
+      <SignUpForm />
+    </Suspense>
   );
 };
 

@@ -9,19 +9,17 @@ export async function proxy(request: NextRequest) {
   });
 
   if (!session?.user) {
-
     // CHANGED 1:
-    // আগে: সরাসরি /login এ পাঠানো হতো।
-    // এখন: user যে page থেকে এসেছে সেই pathname + query save হবে।
-
+    // যে page-এ যেতে চেয়েছিল তার pathname + query সংরক্ষণ।
     const callbackUrl =
       request.nextUrl.pathname + request.nextUrl.search;
 
     // CHANGED 2:
-    // Login URL-এর সাথে callbackUrl পাঠানো হচ্ছে।
-
+    // Login URL তৈরি।
     const loginUrl = new URL("/login", request.url);
 
+    // CHANGED 3:
+    // Login URL-এর সাথে callbackUrl পাঠানো।
     loginUrl.searchParams.set("callbackUrl", callbackUrl);
 
     return NextResponse.redirect(loginUrl);

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import Image from "next/image";
 import logo from "../../../../public/assets/logo.png";
-import { useRouter, useSearchParams } from "next/navigation"; // CHANGED
+import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "react-hot-toast";
 
@@ -15,17 +15,13 @@ const LogInPage = () => {
   const router = useRouter();
 
   // CHANGED 1:
-  // Proxy থেকে পাঠানো callbackUrl গ্রহণ করছি।
-
-  const searchParams = useSearchParams();
-
-  const callbackUrl = searchParams.get("callbackUrl");
-
-  // CHANGED 2:
-  // Safe redirect function.
-  // External website-এ redirect হওয়া prevent করবে।
-
+  // URL থেকে callbackUrl নেওয়া হচ্ছে।
+  // useSearchParams() ব্যবহার করা হয়নি।
   const getRedirectUrl = () => {
+    const params = new URLSearchParams(window.location.search);
+    const callbackUrl = params.get("callbackUrl");
+
+    // Safe redirect validation
     if (
       callbackUrl &&
       callbackUrl.startsWith("/") &&
@@ -38,6 +34,8 @@ const LogInPage = () => {
     return "/";
   };
 
+  // CHANGED 2:
+  // Email Login
   const handleLogIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -59,10 +57,10 @@ const LogInPage = () => {
         toast.success("Logged in successfully!");
 
         // CHANGED 3:
-        // আগে: router.push("/")
-        // এখন: যে page থেকে login এ এসেছিল সেখানে ফিরে যাবে।
-
+        // যে protected page থেকে login-এ এসেছিল
+        // Login successful হলে সেখানেই ফিরে যাবে।
         router.replace(getRedirectUrl());
+        router.refresh();
       }
     } catch (err) {
       console.error("Login error:", err);
@@ -70,11 +68,10 @@ const LogInPage = () => {
     }
   };
 
+  // CHANGED 4:
+  // Google Login-এর ক্ষেত্রেও callbackUrl কাজ করবে।
   const handleGoogleSignIn = async () => {
     try {
-      // CHANGED 4:
-      // Google login successful হলেও আগের page-এ ফিরে যাবে।
-
       await authClient.signIn.social({
         provider: "google",
         callbackURL: getRedirectUrl(),
@@ -88,7 +85,9 @@ const LogInPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-12">
       <div className="w-full max-w-md">
+        {/* Login Card */}
         <div className="bg-white rounded-2xl shadow-xl shadow-gray-200/60 border border-gray-100 p-6 sm:p-8">
+          {/* Logo & Title */}
           <div className="text-center mb-8">
             <div className="flex justify-center items-center gap-4 mb-4">
               <Image
@@ -110,8 +109,8 @@ const LogInPage = () => {
           </div>
 
           {/* Login Form */}
-
           <form className="space-y-5" onSubmit={handleLogIn}>
+            {/* Email */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Email Address
@@ -134,7 +133,6 @@ const LogInPage = () => {
             </div>
 
             {/* Password */}
-
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Password
@@ -166,7 +164,6 @@ const LogInPage = () => {
             </div>
 
             {/* Forget Password */}
-
             <div className="flex justify-end">
               <Link
                 href="/forgot-password"
@@ -177,7 +174,6 @@ const LogInPage = () => {
             </div>
 
             {/* Login Button */}
-
             <button
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition duration-200 shadow-lg shadow-blue-200"
@@ -187,7 +183,6 @@ const LogInPage = () => {
           </form>
 
           {/* Divider */}
-
           <div className="flex items-center gap-4 my-6">
             <div className="flex-1 h-px bg-gray-200" />
 
@@ -197,7 +192,6 @@ const LogInPage = () => {
           </div>
 
           {/* Google Login */}
-
           <button
             type="button"
             onClick={handleGoogleSignIn}
@@ -228,11 +222,13 @@ const LogInPage = () => {
           </button>
 
           {/* Register Link */}
-
           <p className="text-center text-sm text-gray-500 mt-7">
             Don&apos;t have an account?{" "}
+            {/* CHANGED 5:
+                Signup page-এ যাওয়ার সময় callbackUrl থাকবে।
+            */}
             <Link
-              href="/sign-up"
+              href={`/sign-up${typeof window !== "undefined" ? window.location.search : ""}`}
               className="font-bold text-blue-600 hover:text-blue-700"
             >
               Sign Up
@@ -240,6 +236,7 @@ const LogInPage = () => {
           </p>
         </div>
 
+        {/* Footer */}
         <p className="text-center text-sm text-gray-400 mt-6">
           © 2026 BookNook. All rights reserved.
         </p>
