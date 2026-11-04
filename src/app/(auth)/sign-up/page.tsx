@@ -146,6 +146,12 @@ const SignUpPage = () => {
     try {
       // Google OAuth signup/login একসাথেই authentication করে।
       // তাই Google login-এর পর original destination-এ পাঠানো হবে।
+      // তাই Google login-এর পর original destination-এ পাঠানো হবে।
+      // তাই Google login-এর পর original destination-এ পাঠানো হবে।
+      // তাই Google login-এর পর original destination-এ পাঠানো হবে।
+      // তাই Google login-এর পর original destination-এ পাঠানো হবে।
+      // তাই Google login-এর পর original destination-এ পাঠানো হবে।
+      // তাই Google login-এর পর original destination-এ পাঠানো হবে।
 
       await authClient.signIn.social({
         provider: "google",
