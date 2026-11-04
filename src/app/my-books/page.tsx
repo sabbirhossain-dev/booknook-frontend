@@ -13,6 +13,15 @@ import {
 } from "react-icons/fa";
 import toast from "react-hot-toast";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface IBook {
   _id: string;
@@ -34,6 +43,7 @@ const MyBooksPage = () => {
   const [editingBook, setEditingBook] = useState<IBook | null>(null);
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deletingBook, setDeletingBook] = useState<IBook | null>(null);
 
   const userEmail = session?.user?.email;
 
@@ -166,12 +176,6 @@ const MyBooksPage = () => {
   const handleDelete = async (bookId: string) => {
     if (!userEmail) return;
 
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this book?",
-    );
-
-    if (!confirmed) return;
-
     try {
       setDeletingId(bookId);
 
@@ -213,6 +217,15 @@ const MyBooksPage = () => {
     } finally {
       setDeletingId(null);
     }
+  };
+
+  // Confirm deletion from the modal
+  const handleConfirmDelete = () => {
+    if (!deletingBook) return;
+
+    const bookId = deletingBook._id;
+    setDeletingBook(null);
+    handleDelete(bookId);
   };
 
   // Loading
@@ -340,7 +353,7 @@ const MyBooksPage = () => {
                     </button>
 
                     <button
-                      onClick={() => handleDelete(book._id)}
+                      onClick={() => setDeletingBook(book)}
                       disabled={deletingId === book._id}
                       className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-red-50 cursor-pointer px-3 md:px-4 py-2 md:py-3 text-sm font-semibold text-red-600 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50 md:w-full"
                     >
@@ -354,6 +367,55 @@ const MyBooksPage = () => {
           )}
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <Dialog
+        open={deletingBook !== null}
+        onOpenChange={(open) => {
+          if (!open) setDeletingBook(null);
+        }}
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-3 text-lg leading-snug font-bold text-slate-800">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-600">
+                <FaTrash />
+              </span>
+              Delete this book?
+            </DialogTitle>
+
+            <DialogDescription className="text-sm leading-6 text-slate-600">
+              Are you sure you want to delete{" "}
+              <span className="font-semibold text-slate-900">
+                &quot;{deletingBook?.title}&quot;
+              </span>
+              ? This will permanently remove it from your collection and cannot
+              be undone.
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              className="cursor-pointer"
+              onClick={() => setDeletingBook(null)}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              type="button"
+              variant="destructive"
+              className="cursor-pointer"
+              onClick={handleConfirmDelete}
+            >
+              <FaTrash />
+              Delete Book
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Edit Modal */}
       {editingBook && (
@@ -515,7 +577,7 @@ const MyBooksPage = () => {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-50"
+                  className="flex flex-1 items-center justify-center cursor-pointer gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-50"
                 >
                   <FaSave />
                   {saving ? "Saving..." : "Save Changes"}

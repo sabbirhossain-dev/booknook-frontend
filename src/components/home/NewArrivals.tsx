@@ -110,7 +110,7 @@ const NewArrivals = () => {
                 </div>
 
                 {/* Book Information */}
-                <div className="flex flex-1 flex-col p-3">
+                <div className="flex flex-1 flex-col p-3 py-3.5">
                   {/* Title & Author */}
                   <div className="mb-3">
                     <h3 className="line-clamp-1 text-lg font-bold text-gray-900 transition-colors group-hover:text-blue-600">
@@ -144,7 +144,7 @@ const NewArrivals = () => {
                     {/* Details Button */}
                     <Link
                       href={`/all-books/${book._id}`}
-                      className="flex h-9 w-auto shrink-0 items-center justify-center gap-1 rounded-xl bg-blue-600 px-2 text-white transition-all duration-200 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-200"
+                      className="flex h-9 w-auto shrink-0 items-center justify-center gap-1 rounded-xl bg-blue-600 px-3 lg:px-4 text-white transition-all duration-200 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-200"
                       aria-label={`View ${book.title} details`}
                     >
                       <span className="text-sm">View Details</span>
@@ -168,17 +168,17 @@ const NewArrivals = () => {
         )}
 
         {/* See All Books Button */}
-        {!loading && books.length > 0 && (
-          <div className="mt-10 text-center">
-            <Link
-              href="/all-books"
-              className="inline-flex items-center text-sm gap-2 rounded-xl bg-blue-600 px-4 md:px-6 py-2 md:py-3 font-semibold text-white shadow-md shadow-blue-100 transition-all hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-lg"
-            >
-              See All Books
-              <ArrowUpRight size={19} />
-            </Link>
-          </div>
-        )}
+        {/* {!loading && books.length > 0 && (
+          // <div className="mt-10 text-center">
+          //   <Link
+          //     href="/all-books"
+          //     className="inline-flex items-center text-sm gap-2 rounded-xl bg-blue-600 px-4 md:px-6 py-2 md:py-3 font-semibold text-white shadow-md shadow-blue-100 transition-all hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-lg"
+          //   >
+          //     See All Books
+          //     <ArrowUpRight size={19} />
+          //   </Link>
+          // </div>
+        )} */}
       </div>
     </section>
   );

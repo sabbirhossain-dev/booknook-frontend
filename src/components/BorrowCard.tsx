@@ -110,12 +110,12 @@ const BorrowCard = ({ borrow, onReturned }: BorrowCardProps) => {
         </div>
 
         {/* Return Button */}
-        <div className="shrink-0">
+        <div className="shrink-0 ">
           {borrow.status === "borrowed" && (
             <button
               onClick={handleReturn}
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-green-600 px-4 md:px-6 py-2 md:py-3 text-sm font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+              className="flex w-full items-center justify-center gap-2 rounded-lg cursor-pointer bg-green-600 px-4 md:px-6 py-2 md:py-3 text-sm font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
             >
               <FaUndo />
               {loading ? "Returning..." : "Return Book"}

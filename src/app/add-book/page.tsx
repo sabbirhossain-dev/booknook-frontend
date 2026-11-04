@@ -20,16 +20,13 @@ import { authClient } from "@/lib/auth-client";
 
 const categories = [
   "Fiction",
-  "Non-Fiction",
   "Science",
   "History",
-  "Biography",
-  "kids",
-  "Self Help",
-  "Children",
   "Technology",
   "Romance",
-  "Mystery",
+  "Children",
+  "Arts",
+  "Geography",
 ];
 
 const inputClass =
@@ -218,8 +215,7 @@ const AddBookPage = () => {
       });
 
       const result = await res.json();
-
-      console.log("6. Backend Response:", result);
+      toast.success("Book added successfully!");
 
       if (!res.ok) {
         toast.error(result.message || "Failed to add book");
@@ -512,7 +508,7 @@ const AddBookPage = () => {
         <button
           type="submit"
           disabled={uploading || !imageUrl || !user}
-          className="mt-7 flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-2.5 md:py-3.5 text-sm md:text-lg font-semibold text-white shadow-lg shadow-blue-200 transition duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
+          className="mt-7 flex w-full items-center justify-center cursor-pointer gap-2 rounded-xl bg-blue-600 py-2.5 md:py-3.5 text-sm md:text-lg font-semibold text-white shadow-lg shadow-blue-200 transition duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
         >
           {uploading ? (
             <>

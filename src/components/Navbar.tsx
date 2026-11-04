@@ -74,12 +74,14 @@ const NavbarSkeleton = () => (
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   const profileRef = useRef<HTMLDivElement>(null);
 
   const pathname = usePathname();
   const router = useRouter();
 
+  // Better Auth session
   const { data: session, isPending } = authClient.useSession();
 
   const user = session?.user;
@@ -145,16 +147,29 @@ const Navbar = () => {
   /* ---------- Sign Out ---------- */
 
   const handleSignOut = async () => {
+    if (isSigningOut) return;
+
+    setIsSigningOut(true);
     setIsProfileOpen(false);
     setIsOpen(false);
 
-    const { error } = await authClient.signOut();
+    try {
+      const { error } = await authClient.signOut();
 
-    if (error) {
-      toast.error("Failed to sign out.");
-    } else {
+      if (error) {
+        toast.error("Failed to sign out.");
+        return;
+      }
+
       toast.success("Signed out successfully.");
-      router.push("/");
+
+      router.replace("/");
+      router.refresh();
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Something went wrong!");
+    } finally {
+      setIsSigningOut(false);
     }
   };
 
@@ -162,12 +177,12 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 w-full shadow-2xs bg-slate-50 border-b border-gray-100">
       <div>
         <div className="flex items-center justify-between py-3">
-          {/* Logo - Left Side */}
+          {/* Logo */}
 
           <Link href="/" className="flex items-center gap-2">
             <Image
               src={logo}
-              alt="BookNest Logo"
+              alt="BookNook Logo"
               width={40}
               height={40}
               loading="eager"
@@ -200,7 +215,7 @@ const Navbar = () => {
 
           {isPending && <NavbarSkeleton />}
 
-          {/* Desktop Buttons */}
+          {/* Desktop Auth Section */}
 
           {!isPending &&
             (user ? (
@@ -212,7 +227,7 @@ const Navbar = () => {
                     aria-haspopup="menu"
                     aria-expanded={isProfileOpen}
                     aria-label="Open profile menu"
-                    className="group flex items-center gap-2.5 rounded-full border border-gray-200 bg-white py-1 pl-1 pr-3 hover:border-blue-200 hover:bg-blue-50 transition"
+                    className="group flex items-center gap-2.5 rounded-full cursor-pointer border border-gray-200 bg-white py-1 pl-1 pr-3 hover:border-blue-200 hover:bg-blue-50 transition"
                   >
                     <UserAvatar src={user.image} name={user.name} />
 
@@ -270,11 +285,12 @@ const Navbar = () => {
                       <button
                         type="button"
                         role="menuitem"
+                        disabled={isSigningOut}
                         onClick={handleSignOut}
-                        className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 transition"
+                        className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 transition disabled:opacity-50"
                       >
                         <LogOut size={17} />
-                        Logout
+                        {isSigningOut ? "Signing out..." : "Logout"}
                       </button>
                     </div>
                   )}
@@ -298,11 +314,9 @@ const Navbar = () => {
               </div>
             ))}
 
-          {/* Mobile Right Side: User Image + Menu Button */}
+          {/* Mobile Right Side */}
 
           <div className="flex lg:hidden items-center gap-3">
-            {/* User Image */}
-
             {!isPending && user && (
               <Link
                 href="/profile"
@@ -316,8 +330,6 @@ const Navbar = () => {
                 />
               </Link>
             )}
-
-            {/* Mobile Menu Button */}
 
             <button
               type="button"
@@ -336,8 +348,6 @@ const Navbar = () => {
         {isOpen && (
           <div className="lg:hidden border-t border-gray-100 py-5">
             <div className="flex flex-col gap-1">
-              {/* Public + Private Links */}
-
               {visibleLinks.map((link) => (
                 <Link
                   key={link.name}
@@ -364,8 +374,6 @@ const Navbar = () => {
               </div>
             ) : user ? (
               <div className="flex flex-col gap-3 mt-4 px-4">
-                {/* Profile */}
-
                 <Link
                   href="/profile"
                   onClick={() => setIsOpen(false)}
@@ -382,15 +390,14 @@ const Navbar = () => {
                   </span>
                 </Link>
 
-                {/* Sign Out */}
-
                 <button
                   type="button"
+                  disabled={isSigningOut}
                   onClick={handleSignOut}
-                  className="flex items-center justify-center gap-2 text-center border border-gray-200 py-3 rounded-lg font-semibold text-gray-700 hover:bg-gray-50 transition"
+                  className="flex items-center justify-center gap-2 text-center border border-gray-200 py-3 rounded-lg font-semibold text-gray-700 hover:bg-gray-50 transition disabled:opacity-50"
                 >
                   <LogOut size={18} />
-                  Sign Out
+                  {isSigningOut ? "Signing out..." : "Sign Out"}
                 </button>
               </div>
             ) : (

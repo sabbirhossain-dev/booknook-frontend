@@ -9,9 +9,9 @@ import { ArrowRight, BookOpen, Sparkles, TrendingUp } from "lucide-react";
 import "swiper/css";
 import "swiper/css/pagination";
 
-import bannerImg1 from "../../../public/assets/banner-img1.jpg";
-import bannerImg2 from "../../../public/assets/banner-img-2.jpg";
-import bannerImg3 from "../../../public/assets/banner-img-3.jpg";
+import bannerImg1 from "../../../public/assets/bannerImg1.jpg";
+import bannerImg2 from "../../../public/assets/bannerImg2.jpg";
+import bannerImg3 from "../../../public/assets/bannerImg3.jpg";
 import { useEffect, useState } from "react";
 
 const slides = [
@@ -88,9 +88,9 @@ const Banner = () => {
 
             return (
               <SwiperSlide key={slide.id}>
-                <div className="grid min-h-[540px] grid-cols-1 overflow-hidden bg-[#f5f8ff] md:min-h-[430px] md:grid-cols-2 lg:min-h-[490px]">
+                <div className="grid min-h-[540px] grid-cols-1 overflow-hidden bg-[#f5f8ff] md:min-h-[420px] md:grid-cols-2 lg:min-h-[490px]">
                   {/* Left Content */}
-                  <div className="relative flex flex-col justify-center px-4 py-12 sm:px-10 sm:py-14 lg:px-16">
+                  <div className="relative flex flex-col justify-center px-4 py-14 sm:px-6 lg:py-14 lg:px-16">
                     {/* Decorative Background */}
                     <div className="pointer-events-none absolute -left-20 top-10 h-56 w-56 rounded-full bg-blue-100/50 blur-3xl" />
 
@@ -120,7 +120,7 @@ const Banner = () => {
                       <div className="mt-8 flex flex-wrap items-center gap-3">
                         <Link
                           href="/all-books"
-                          className="group inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 md:px-6 mdLpy-3.5 text-sm font-bold text-white shadow-lg shadow-blue-200 transition-all duration-300 hover:-translate-y-1 hover:bg-blue-700 hover:shadow-blue-300"
+                          className="group inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 lg:px-4 lg:py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-200 transition-all duration-300 hover:-translate-y-1 hover:bg-blue-700 hover:shadow-blue-300"
                         >
                           Explore Books
                           <ArrowRight
@@ -131,7 +131,7 @@ const Banner = () => {
 
                         <Link
                           href="/all-books"
-                          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 md:px-6 mdLpy-3.5 text-sm font-bold text-slate-700 transition-all hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
+                          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 lg:px-6 lg:py-3.5 text-sm font-bold text-slate-700 transition-all hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
                         >
                           Browse Books
                         </Link>
