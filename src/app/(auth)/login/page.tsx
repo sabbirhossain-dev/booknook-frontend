@@ -14,9 +14,7 @@ const LogInPage = () => {
 
   const router = useRouter();
 
-  // CHANGED 1:
-  // URL থেকে callbackUrl নেওয়া হচ্ছে।
-  // useSearchParams() ব্যবহার করা হয়নি।
+  // redirect url
   const getRedirectUrl = () => {
     const params = new URLSearchParams(window.location.search);
     const callbackUrl = params.get("callbackUrl");
@@ -34,8 +32,7 @@ const LogInPage = () => {
     return "/";
   };
 
-  // CHANGED 2:
-  // Email Login
+  // handle login
   const handleLogIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -56,9 +53,7 @@ const LogInPage = () => {
       if (data) {
         toast.success("Logged in successfully!");
 
-        // CHANGED 3:
-        // যে protected page থেকে login-এ এসেছিল
-        // Login successful হলে সেখানেই ফিরে যাবে।
+        // redirect the page where came from
         router.replace(getRedirectUrl());
         router.refresh();
       }
@@ -68,14 +63,20 @@ const LogInPage = () => {
     }
   };
 
-  // CHANGED 4:
-  // Google Login-এর ক্ষেত্রেও callbackUrl কাজ করবে।
+  //google singin
   const handleGoogleSignIn = async () => {
     try {
-      await authClient.signIn.social({
+      const { error } = await authClient.signIn.social({
         provider: "google",
         callbackURL: getRedirectUrl(),
       });
+
+      if (error) {
+        toast.error(error.message || "Google login failed!");
+        return;
+      }
+
+      toast.success("Login Successfully");
     } catch (error) {
       console.error("Google Login Error:", error);
       toast.error("Google login failed!");
@@ -176,7 +177,7 @@ const LogInPage = () => {
             {/* Login Button */}
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition duration-200 shadow-lg shadow-blue-200"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition duration-200 shadow-lg shadow-blue-200 cursor-pointer"
             >
               Login
             </button>

@@ -569,7 +569,7 @@ const MyBooksPage = () => {
                 <button
                   type="button"
                   onClick={() => setEditingBook(null)}
-                  className="flex-1 rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+                  className="flex-1 rounded-xl border cursor-pointer border-slate-200 px-4 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
                 >
                   Cancel
                 </button>

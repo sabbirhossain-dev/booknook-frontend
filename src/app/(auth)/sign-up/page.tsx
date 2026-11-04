@@ -131,11 +131,10 @@ const SignUpForm = () => {
       if (data) {
         toast.success("Registration successful!");
 
-        // Automatically created session থেকে sign out
+        // Automatically created session sign out
         await authClient.signOut();
 
-        // Login page-এ redirect
-        // Callback URL থাকলে সেটিও preserve হবে
+        // Login page redirect
         router.replace(getLoginUrl());
       }
     } catch (error) {
