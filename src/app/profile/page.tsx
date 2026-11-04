@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Mail, LogOut, UserRound } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "react-hot-toast";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const getInitials = (name: string) =>
   name
@@ -30,8 +31,8 @@ const ProfilePage = () => {
 
   if (isPending || !user) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center text-gray-400 font-medium">
-        Loading profile…
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <LoadingSpinner label="Loading profile..." />
       </div>
     );
   }

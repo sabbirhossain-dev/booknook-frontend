@@ -5,6 +5,7 @@ import { FaBookOpen } from "react-icons/fa";
 
 import BorrowCard from "@/components/BorrowCard";
 import { authClient } from "@/lib/auth-client";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 interface IBorrow {
   _id: string;
@@ -93,11 +94,7 @@ const MyBorrowsPage = () => {
   if (isPending || loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#F8FAFC]">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-indigo-100 border-t-indigo-600" />
-
-          <p className="text-gray-500">Loading your borrowed books...</p>
-        </div>
+        <LoadingSpinner label="Loading your borrowed books..." />
       </div>
     );
   }

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { BookOpen, ArrowLeft } from "lucide-react";
 
 import BookCard from "@/components/BookCard";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { IBook } from "../../../types/books";
 
 const AllBooksContent = () => {
@@ -117,21 +118,8 @@ const AllBooksContent = () => {
 
         {/* Loading */}
         {loading ? (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {Array.from({ length: 8 }).map((_, index) => (
-              <div
-                key={index}
-                className="overflow-hidden rounded-2xl border border-gray-100 bg-white"
-              >
-                <div className="h-64 animate-pulse bg-gray-200" />
-
-                <div className="space-y-3 p-4">
-                  <div className="h-5 w-3/4 animate-pulse rounded bg-gray-200" />
-                  <div className="h-4 w-1/2 animate-pulse rounded bg-gray-200" />
-                  <div className="h-10 animate-pulse rounded bg-gray-200" />
-                </div>
-              </div>
-            ))}
+          <div className="flex min-h-[24rem] items-center justify-center">
+            <LoadingSpinner label="Loading books..." />
           </div>
         ) : error ? (
           /* Error */
@@ -184,8 +172,8 @@ const AllBooksPage = () => {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-slate-50 py-20 text-center text-gray-500">
-          Loading books...
+        <div className="flex min-h-[50vh] items-center justify-center bg-slate-50 py-20">
+          <LoadingSpinner label="Loading books..." />
         </div>
       }
     >

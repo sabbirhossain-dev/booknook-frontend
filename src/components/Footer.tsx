@@ -10,6 +10,7 @@ import {
   FaMapMarkerAlt,
   FaBookOpen,
 } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
   return (
@@ -53,7 +54,7 @@ const Footer = () => {
                 aria-label="Twitter"
                 className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-sky-500 shadow-sm transition-all hover:-translate-y-1 hover:bg-sky-500 hover:text-white"
               >
-                <FaTwitter size={17} />
+                <FaXTwitter size={17} />
               </a>
 
               <a
@@ -141,7 +142,7 @@ const Footer = () => {
             </p>
 
             <a
-              href="mailto:support@booknest.com"
+              href="mailto:support@booknook.com"
               className="inline-flex max-w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2 md:py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
             >
               <FaEnvelope size={16} />
@@ -166,7 +167,7 @@ const Footer = () => {
         {/* Bottom Footer */}
         <div className="flex flex-col items-center justify-between gap-1 md:gap-5 text-center sm:flex-row sm:text-left">
           <p className="text-xs leading-6 text-slate-500 sm:text-sm">
-            © {new Date().getFullYear()} BookNest. All rights reserved.
+            © {new Date().getFullYear()} BookNook. All rights reserved.
           </p>
 
           <p className="flex flex-wrap items-center justify-center gap-1 text-xs text-slate-500 sm:text-sm">

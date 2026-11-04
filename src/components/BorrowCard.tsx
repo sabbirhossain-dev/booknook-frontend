@@ -39,6 +39,7 @@ const BorrowCard = ({ borrow, onReturned }: BorrowCardProps) => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/borrows/${borrow._id}/return`,
         {
+          // method: "DELETE",
           method: "PATCH",
           headers: {
             Authorization: `Bearer ${data.token}`,

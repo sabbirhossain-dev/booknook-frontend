@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import {
   ArrowLeft,
   BookOpen,
@@ -15,6 +16,10 @@ import BorrowButton from "@/components/BorrowButton";
 import { IBook } from "../../../../types/books";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+
+export const metadata: Metadata = {
+  title: "Book Details",
+};
 
 interface BookDetailsPageProps {
   params: Promise<{ bookId: string }>;

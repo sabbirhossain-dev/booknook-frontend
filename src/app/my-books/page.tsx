@@ -12,6 +12,7 @@ import {
   FaLayerGroup,
 } from "react-icons/fa";
 import toast from "react-hot-toast";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 interface IBook {
   _id: string;
@@ -121,7 +122,8 @@ const MyBooksPage = () => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/books/${editingBook._id}`,
         {
-          method: "PUT",
+          method: "PATCH",
+          // method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${data.token}`,
@@ -217,7 +219,7 @@ const MyBooksPage = () => {
   if (isPending || loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-50">
-        <p className="font-medium text-slate-500">Loading your books...</p>
+        <LoadingSpinner label="Loading your books..." />
       </div>
     );
   }

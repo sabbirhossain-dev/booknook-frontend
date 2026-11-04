@@ -11,7 +11,10 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Book Nook",
+  title: {
+    default: "BookNook",
+    template: "BookNook | %s",
+  },
   description: "A Online Bookstore for Book Lovers",
 };
 

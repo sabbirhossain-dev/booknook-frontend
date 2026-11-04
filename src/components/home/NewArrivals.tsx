@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { IBook } from "../../../types/books";
 import { BookOpen, User, ArrowUpRight, Library } from "lucide-react";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const NewArrivals = () => {
   const [books, setBooks] = useState<IBook[]>([]);
@@ -64,22 +65,10 @@ const NewArrivals = () => {
           </Link>
         </div>
 
-        {/* Loading Skeleton */}
+        {/* Loading Spinner */}
         {loading ? (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, index) => (
-              <div
-                key={index}
-                className="overflow-hidden rounded-2xl border border-gray-100 bg-white"
-              >
-                <div className="h-64 animate-pulse bg-gray-200" />
-                <div className="space-y-3 p-4">
-                  <div className="h-5 w-3/4 animate-pulse rounded bg-gray-200" />
-                  <div className="h-4 w-1/2 animate-pulse rounded bg-gray-200" />
-                  <div className="h-10 animate-pulse rounded bg-gray-200" />
-                </div>
-              </div>
-            ))}
+          <div className="flex min-h-[22rem] items-center justify-center">
+            <LoadingSpinner label="Loading new arrivals..." />
           </div>
         ) : books.length > 0 ? (
           /* Books Grid */
