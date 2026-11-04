@@ -4,7 +4,7 @@ BookNook is a modern online library management application where users can explo
 
 ## 🌐 Live Website
 
-**Live Site:** https://your-booknook-live-url.vercel.app
+**Live Site:** https://booknook-frontend-livid.vercel.app
 
 **Frontend Repository:** https://github.com/sabbirhossain-dev/booknook-frontend
 

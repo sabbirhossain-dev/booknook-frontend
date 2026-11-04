@@ -99,7 +99,7 @@ const BorrowButton = ({ book }: BorrowButtonProps) => {
                 : "cursor-pointer bg-blue-600 px-6 text-white shadow-blue-100 hover:bg-blue-700"
             }`}
           >
-            {isUnavailable ? "Unavailable" : "Borrow Book"}
+            {isUnavailable ? "Not available" : "Borrow Book"}
           </Button>
         }
       />

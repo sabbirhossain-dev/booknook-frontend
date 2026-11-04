@@ -37,7 +37,7 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
       headers: await headers(),
     });
 
-    console.log("JWT Token:", !!jwtToken?.token);
+    // console.log("JWT Token:", !!jwtToken?.token);
 
     if (!jwtToken?.token) {
       throw new Error("Authentication token not found");
@@ -57,7 +57,7 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
 
     const result = await res.json();
 
-    console.log("Book API Response:", result);
+    // console.log("Book API Response:", result);
 
     if (res.status === 404) {
       notFound();

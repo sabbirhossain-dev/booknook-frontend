@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
+import { router } from "better-auth/api";
+import { useRouter } from "next/navigation";
 
 const categories = [
   "Fiction",
@@ -164,6 +166,8 @@ const AddBookPage = () => {
   //   }
   // };
 
+  const router = useRouter();
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -222,6 +226,7 @@ const AddBookPage = () => {
         return;
       }
 
+      router.push("/my-books");
       form.reset();
       setImageUrl("");
     } catch (error) {
