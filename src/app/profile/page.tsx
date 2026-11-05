@@ -82,7 +82,7 @@ const ProfilePage = () => {
 
           <button
             onClick={handleSignOut}
-            className="mt-3 w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition duration-200 shadow-lg shadow-blue-200"
+            className="mt-3 w-full cursor-pointer flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition duration-200 shadow-lg shadow-blue-200"
           >
             <LogOut size={18} />
             Sign Out
