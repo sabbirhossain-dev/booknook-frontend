@@ -72,7 +72,7 @@ const categories = [
 const ExploreCategories = () => {
   return (
     <section className="bg-slate-50 py-16 sm:py-20">
-      <div className="mx-auto max-w-7xl px-4">
+      <div className=" px-0 md:px-4">
         <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
             <span className="text-sm font-bold uppercase tracking-wider text-blue-600">

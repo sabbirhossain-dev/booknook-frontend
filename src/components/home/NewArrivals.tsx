@@ -39,7 +39,7 @@ const NewArrivals = () => {
 
   return (
     <section className="bg-slate-50 py-16">
-      <div className="mx-auto max-w-7xl px-2 mdLpx-4">
+      <div className="px-0 md:px-4">
         {/* Section Header */}
         <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
@@ -73,7 +73,7 @@ const NewArrivals = () => {
         ) : books.length > 0 ? (
           /* Books Grid */
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {books.slice(0, 6).map((book) => (
+            {books.map((book) => (
               <div
                 key={book._id}
                 className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-100/60"
