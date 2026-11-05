@@ -154,7 +154,7 @@ const BorrowButton = ({ book }: BorrowButtonProps) => {
           <Button
             onClick={handleBorrow}
             disabled={loading || success || !user}
-            className={`h-11 w-full rounded-lg font-semibold ${
+            className={`h-11 w-full rounded-lg font-semibold  cursor-pointer ${
               success
                 ? "bg-emerald-600 hover:bg-emerald-600"
                 : "bg-blue-600 hover:bg-blue-700"
